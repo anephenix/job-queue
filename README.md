@@ -2,6 +2,12 @@
 
 A Node.js library for job queues, using Redis to store the queue data.
 
+The Queue class manages working with Redis to move the job between these
+lists, and provides a simple interface to working with job queues.
+
+The Worker class provides a way to write programs that work with the queue to
+fetch jobs, process them, and either mark them as completed or failed.
+
 ### Dependencies
 
 - [Node.js](https://nodejs.org)
@@ -12,40 +18,6 @@ A Node.js library for job queues, using Redis to store the queue data.
 ```shell
 npm i @anephenix/job-queue
 ```
-
-### Key concepts
-
-Job queue consists of 2 elements, queues and workers:
-
-- Queues, essentially categorised lists of jobs that need processing.
-- Workers, programs that process jobs on the queue.
-
-Redis is used to store the data for the queues. Each queue consists of 4
-lists in Redis. For example, say you have a queue named "email", in Redis
-there will be 4 lists for that queue:
-
-- email-available
-- email-processing
-- email-completed
-- email-failed
-
-A job that is added to the email queue will first be inserted into the
-"email-available" list.
-
-When a worker takes the job, the job is moved from the "email-available" list
-into the "email-processing" list.
-
-If the job is completed, the job is moved from the "email-processing" list to
-the "email-completed" list.
-
-If the job is failed, the job is moved from the "email-processing" list to
-the "email-failed" list.
-
-The Queue class manages working with Redis to move the job between these
-lists, and provides a simple interface to working with job queues.
-
-The Worker class provides a way to write programs that work with the queue to
-fetch jobs, process them, and either mark them as completed or failed.
 
 ### Usage
 
@@ -118,6 +90,19 @@ worker is now setup to start processing jobs.
 
 #### Starting the worker
 
+```javascript
+await emailWorker.start();
 ```
-emailWorker.start();
+
+The worker will now poll the queue for available jobs. Once it has one, it
+will take the job and process it.
+
+#### Stopping the worker
+
+```javascript
+await emailWorker.stop();
 ```
+
+### License and Credits
+
+&copy;2020. Anephenix OÜ. Job Queue is licensed under the MIT license.
