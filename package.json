@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "lint": "npx eslint .",
-    "test": "NODE_ENV=test jest --runInBand --coverage --forceExit"
+    "test": "NODE_ENV=test jest --runInBand --coverage --forceExit",
+    "coveralls": "NODE_ENV=test jest --runInBand --coverage --forceExit --coverageReporters=text-lcov | coveralls"
   },
   "keywords": [
     "job",
