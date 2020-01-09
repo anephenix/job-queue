@@ -1,5 +1,8 @@
 # Job Queue
 
+[![CircleCI](https://circleci.com/gh/anephenix/job-queue.svg?style=shield)](https://circleci.com/gh/anephenix/job-queue)
+[![Coverage Status](https://coveralls.io/repos/github/anephenix/job-queue/badge.svg?branch=master)](https://coveralls.io/github/anephenix/job-queue?branch=master)
+
 A Node.js library for job queues, using Redis to store the queue data.
 
 The Queue class manages working with Redis to move the job between these
