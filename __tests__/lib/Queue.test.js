@@ -114,4 +114,25 @@ describe('Queue', () => {
 			assert.equal(failed, null);
 		});
 	});
+	describe('hooks', () => {
+		it('should allow the developer to add pre and post hooks to called actions', async () => {
+			const queueKey = 'another-example-queue';
+			let jobParam = null;
+			const queue = new Queue({
+				queueKey,
+				redis,
+				hooks: {
+					add: {
+						pre: async job => {
+							jobParam = job;
+							return job;
+						},
+					},
+				},
+			});
+			job = { name: 'example-job' };
+			await queue.add(job);
+			assert.deepEqual(jobParam, job);
+		});
+	});
 });
