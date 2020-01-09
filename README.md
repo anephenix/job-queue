@@ -3,13 +3,13 @@
 [![npm version](https://badge.fury.io/js/%40anephenix%2Fjob-queue.svg)](https://badge.fury.io/js/%40anephenix%2Fjob-queue) [![CircleCI](https://circleci.com/gh/anephenix/job-queue.svg?style=shield)](https://circleci.com/gh/anephenix/job-queue)
 [![Coverage Status](https://coveralls.io/repos/github/anephenix/job-queue/badge.svg?branch=master)](https://coveralls.io/github/anephenix/job-queue?branch=master) [![Greenkeeper badge](https://badges.greenkeeper.io/anephenix/job-queue.svg)](https://greenkeeper.io/) [![Maintainability](https://api.codeclimate.com/v1/badges/8549f1da9906b66d02ea/maintainability)](https://codeclimate.com/github/anephenix/job-queue/maintainability)
 
-A Node.js library for job queues, using Redis to store the queue data.
+A Node.js Job Queue library using Redis.
 
-The Queue class manages working with Redis to move the job between these
-lists, and provides a simple interface to working with job queues.
+### Features
 
-The Worker class provides a way to write programs that work with the queue to
-fetch jobs, process them, and either mark them as completed or failed.
+- Create job queues
+- Create workers to process jobs on those queues
+- Store the queues and jobs in Redis for data persistence
 
 ### Dependencies
 
