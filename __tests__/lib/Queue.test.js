@@ -38,6 +38,13 @@ describe('Queue', () => {
 			const fetchedJob = await queue.inspect();
 			assert.deepEqual(job, fetchedJob);
 		});
+
+		it('should return null if there are no available jobs on the queue', async () => {
+			const queueKey = 'this-example-queue';
+			const anotherQueue = new Queue({ queueKey, redis });
+			const result = await anotherQueue.inspect();
+			assert.equal(result, null);
+		});
 	});
 	describe('taking a job', () => {
 		it('should move a job from the available queue to the processing queue', async () => {
