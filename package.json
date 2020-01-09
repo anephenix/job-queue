@@ -1,5 +1,5 @@
 {
-  "name": "job-queue",
+  "name": "@anephenix/job-queue",
   "version": "1.0.0",
   "description": "Job Queue",
   "main": "index.js",
