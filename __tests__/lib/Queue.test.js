@@ -1,46 +1,46 @@
 // Dependencies
-const assert = require("assert");
-const Queue = require("../../lib/Queue");
-const redis = require("../redis.test.js");
+const assert = require('assert');
+const Queue = require('../../lib/Queue');
+const redis = require('../redis.test.js');
 
-describe("Queue", () => {
+describe('Queue', () => {
 	let queue;
 	let job;
 
 	beforeAll(() => {
-		const queueKey = "example-queue";
+		const queueKey = 'example-queue';
 		queue = new Queue({ queueKey, redis });
-		job = { name: "example-job" };
+		job = { name: 'example-job' };
 	});
-	describe("creating an instance", () => {
-		it("should set the redis client", () => {
+	describe('creating an instance', () => {
+		it('should set the redis client', () => {
 			assert.deepEqual(redis, queue.redis);
 		});
-		it("should have a set of subQeueKeys for each list", () => {
+		it('should have a set of subQeueKeys for each list', () => {
 			assert.deepEqual(queue.subQueueKeys, {
 				available: `example-queue-available`,
 				processing: `example-queue-processing`,
 				completed: `example-queue-completed`,
-				failed: `example-queue-failed`
+				failed: `example-queue-failed`,
 			});
 		});
 	});
-	describe("adding a job", () => {
-		it("should add a job to the available queue", async () => {
+	describe('adding a job', () => {
+		it('should add a job to the available queue', async () => {
 			await queue.add(job);
 			const fetchedJob = await queue.inspect();
 			assert.deepEqual(job, fetchedJob);
 		});
 	});
 
-	describe("inspecting a job", () => {
-		it("should return the latest job on the available queue", async () => {
+	describe('inspecting a job', () => {
+		it('should return the latest job on the available queue', async () => {
 			const fetchedJob = await queue.inspect();
 			assert.deepEqual(job, fetchedJob);
 		});
 	});
-	describe("taking a job", () => {
-		it("should move a job from the available queue to the processing queue", async () => {
+	describe('taking a job', () => {
+		it('should move a job from the available queue to the processing queue', async () => {
 			const fetchedJob = await queue.take();
 			assert.deepEqual(job, fetchedJob);
 			const redisJob = await redis.lindexAsync(
@@ -50,8 +50,8 @@ describe("Queue", () => {
 			assert.deepEqual(JSON.parse(redisJob), fetchedJob);
 		});
 	});
-	describe("completing a job", () => {
-		it("should move a job from the processing queue to the completed queue", async () => {
+	describe('completing a job', () => {
+		it('should move a job from the processing queue to the completed queue', async () => {
 			const redisJob = await redis.lindexAsync(
 				queue.subQueueKeys.processing,
 				-1
@@ -70,9 +70,9 @@ describe("Queue", () => {
 			assert.deepEqual(JSON.parse(completedRedisJob), parsedJob);
 		});
 	});
-	describe("failing a job", () => {
-		it("should move a job from the processing queue to the failed queue", async () => {
-			const anotherJob = { name: "Another example job" };
+	describe('failing a job', () => {
+		it('should move a job from the processing queue to the failed queue', async () => {
+			const anotherJob = { name: 'Another example job' };
 			await queue.add(anotherJob);
 			await queue.take();
 			await queue.fail(anotherJob);
@@ -89,8 +89,8 @@ describe("Queue", () => {
 			assert.deepEqual(JSON.parse(failedRedisJob), anotherJob);
 		});
 	});
-	describe("flushing all jobs", () => {
-		it("should remove all jobs from all queues", async () => {
+	describe('flushing all jobs', () => {
+		it('should remove all jobs from all queues', async () => {
 			await queue.flushAll();
 			const available = await redis.lindexAsync(
 				queue.subQueueKeys.available,
@@ -104,7 +104,10 @@ describe("Queue", () => {
 				queue.subQueueKeys.completed,
 				-1
 			);
-			const failed = await redis.lindexAsync(queue.subQueueKeys.failed, -1);
+			const failed = await redis.lindexAsync(
+				queue.subQueueKeys.failed,
+				-1
+			);
 			assert.equal(available, null);
 			assert.equal(processing, null);
 			assert.equal(completed, null);

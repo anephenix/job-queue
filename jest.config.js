@@ -24,7 +24,7 @@ module.exports = {
 	// collectCoverageFrom: null,
 
 	// The directory where Jest should output its coverage files
-	coverageDirectory: "coverage",
+	coverageDirectory: 'coverage',
 
 	// testSequencer: path.join(__dirname, './TestSequencer.js'),
 
@@ -146,7 +146,7 @@ module.exports = {
 	// ],
 
 	// An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
-	testPathIgnorePatterns: ["/node_modules/", "/__tests__/redis.test.js"]
+	testPathIgnorePatterns: ['/node_modules/', '/__tests__/redis.test.js'],
 
 	// The regexp pattern or array of patterns that Jest uses to detect test files
 	// testRegex: [],

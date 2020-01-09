@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 
 // Dependencies
-const bluebird = require("bluebird");
-const redisLib = require("redis");
+const bluebird = require('bluebird');
+const redisLib = require('redis');
 bluebird.promisifyAll(redisLib.RedisClient.prototype);
 bluebird.promisifyAll(redisLib.Multi.prototype);
 const redis = redisLib.createClient();
