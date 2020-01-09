@@ -7,14 +7,15 @@ A Node.js Job Queue library using Redis.
 
 ### Features
 
-- Create job queues
-- Create workers to process jobs on those queues
-- Store the queues and jobs in Redis for data persistence
+-   Create job queues
+-   Create workers to process jobs on those queues
+-   Store the queues and jobs in Redis for data persistence
+-   Use hooks to trigger actions during the job lifecycle
 
 ### Dependencies
 
-- [Node.js](https://nodejs.org)
-- [Redis](https://redis.io)
+-   [Node.js](https://nodejs.org)
+-   [Redis](https://redis.io)
 
 ### Install
 
@@ -28,8 +29,8 @@ You will need a create a Redis client that is promisified with bluebird.
 
 ```javascript
 // Dependencies
-const bluebird = require("bluebird");
-const redisLib = require("redis");
+const bluebird = require('bluebird');
+const redisLib = require('redis');
 bluebird.promisifyAll(redisLib.RedisClient.prototype);
 bluebird.promisifyAll(redisLib.Multi.prototype);
 const redisConfig = {};
@@ -39,9 +40,9 @@ const redis = redisLib.createClient(redisConfig);
 Once you have that, you can create a queue like this:
 
 ```javascript
-const { Queue } = require("@anephenix/job-queue");
+const { Queue } = require('@anephenix/job-queue');
 
-const emailQueue = new Queue({ queueKey: "email", redis });
+const emailQueue = new Queue({ queueKey: 'email', redis });
 ```
 
 #### Adding jobs
@@ -50,13 +51,13 @@ Once you have the queue ready, you can add jobs like this:
 
 ```javascript
 const job = {
-  name: "job-001",
-  data: {
-    from: "bob@bob.com",
-    to: "sally@sally.com",
-    subject: "Have you got the document for ML results?",
-    body: "I want to check what the loss rate was. Thanks."
-  }
+	name: 'job-001',
+	data: {
+		from: 'bob@bob.com',
+		to: 'sally@sally.com',
+		subject: 'Have you got the document for ML results?',
+		body: 'I want to check what the loss rate was. Thanks.',
+	},
 };
 
 emailQueue.add(job);
@@ -67,20 +68,20 @@ emailQueue.add(job);
 Workers can be setup like this:
 
 ```javascript
-const { Worker } = require("@anephenix/job-queue");
-const sendEmail = require("./sendEmail");
+const { Worker } = require('@anephenix/job-queue');
+const sendEmail = require('./sendEmail');
 
 class EmailWorker extends Worker {
-  async processJob(job) {
-    this.status = "processing";
-    try {
-      await sendEmail(job);
-      await this.completeJob(job);
-    } catch (err) {
-      await this.failJob(job);
-    }
-    return;
-  }
+	async processJob(job) {
+		this.status = 'processing';
+		try {
+			await sendEmail(job);
+			await this.completeJob(job);
+		} catch (err) {
+			await this.failJob(job);
+		}
+		return;
+	}
 }
 
 const emailWorker = new EmailWorker(emailQueue);
@@ -104,6 +105,49 @@ will take the job and process it.
 
 ```javascript
 await emailWorker.stop();
+```
+
+### Advanced Features
+
+#### Using hooks in the Queue
+
+Hooks are a way to trigger functions before and after these actions are
+called on the queue:
+
+-   add
+-   take
+-   complete
+-   fail
+
+This gives you the ability to do things like collect data on how many jobs
+are being added to a queue, how quickly they are being processed, and so on.
+
+There are 2 types of hook, pre and post. A pre hook is called before the
+action is triggered, and a post hook is called after.
+
+The way to setup hooks to call can be demonstrated in the example below:
+
+```javascript
+const queueKey = 'email';
+const queue = new Queue({
+	queueKey,
+	redis,
+	hooks: {
+		add: {
+			pre: async job => {
+				// Do something with the job before it is added
+				return job;
+			},
+			post: async job => {
+				// Do something with the job after it is added
+				return job;
+			},
+		},
+		take: {},
+		complete: {},
+		fail: {},
+	},
+});
 ```
 
 ### License and Credits
