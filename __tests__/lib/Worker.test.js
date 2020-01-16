@@ -243,5 +243,49 @@ describe('Worker', () => {
 				assert.equal(callCount, 2);
 			});
 		});
+
+		describe('#releaseJob', () => {
+			let anotherQueue;
+			let job;
+			let anotherWorker;
+			let callCount = 0;
+
+			beforeAll(async () => {
+				anotherQueue = new Queue({
+					queueKey: 'another-example',
+					redis,
+				});
+				job = { name: 'Another example job to complete' };
+				await anotherQueue.add(job);
+				anotherWorker = new Worker(anotherQueue);
+				anotherWorker.queue.take = async () => {
+					if (callCount === 0) {
+						callCount++;
+						return job;
+					} else {
+						callCount++;
+						return null;
+					}
+				};
+				anotherWorker.processJob = async () => {};
+				await anotherWorker.start();
+				await anotherWorker.releaseJob(job);
+				await delay(10);
+			});
+
+			it('should push the job to the available queue', async () => {
+				const fetchedJob = await redis.lindexAsync(
+					anotherQueue.subQueueKeys.available,
+					-1
+				);
+				assert.deepEqual(JSON.parse(fetchedJob), job);
+			});
+			it("should set the worker's status to available", async () => {
+				assert.deepEqual(anotherWorker.status, 'available');
+			});
+			it('should then attempt to get another job', async () => {
+				assert.equal(callCount, 2);
+			});
+		});
 	});
 });
