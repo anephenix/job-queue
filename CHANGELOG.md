@@ -1,5 +1,9 @@
 # CHANGELOG
 
+### 1.0.3 - Thursday 16th January, 2020
+
+-   Added Worker.releaseJob(job) to support putting a job back on the queue when it is in the stage of processing.
+
 ### 1.0.2 - Thursday 16th January, 2020
 
 -   Added Queue.release(job) to support putting a job back on the queue when it is in the stage of processing.
