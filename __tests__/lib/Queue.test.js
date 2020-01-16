@@ -96,6 +96,25 @@ describe('Queue', () => {
 			assert.deepEqual(JSON.parse(failedRedisJob), anotherJob);
 		});
 	});
+	describe('releasing a job', () => {
+		it('should move a job from the processing queue to the available queue', async () => {
+			const anotherJob = { name: 'Another example job' };
+			await queue.add(anotherJob);
+			await queue.take();
+			await queue.release(anotherJob);
+
+			const processingRedisJob = await redis.lindexAsync(
+				queue.subQueueKeys.processing,
+				-1
+			);
+			const releasedRedisJob = await redis.lindexAsync(
+				queue.subQueueKeys.available,
+				-1
+			);
+			assert.equal(processingRedisJob, null);
+			assert.deepEqual(JSON.parse(releasedRedisJob), anotherJob);
+		});
+	});
 	describe('flushing all jobs', () => {
 		it('should remove all jobs from all queues', async () => {
 			await queue.flushAll();
