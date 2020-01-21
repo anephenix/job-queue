@@ -37,6 +37,26 @@ describe('Worker', () => {
 		});
 	});
 
+	describe('#stop', () => {
+		// NOTE - does worker.stop() release a job if one is in progress?
+		// perhaps the job needs to be assigned to a value on the worker,
+		// set upon process
+		// unset upon complete/fail/release
+		// if stop is called, apply stop, release the job, and shut down
+		it('should set the worker status to stopped', async () => {
+			const anotherQueue = new Queue({
+				queueKey: 'another-example',
+				redis,
+			});
+			const anotherWorker = new Worker(anotherQueue);
+			await anotherWorker.stop();
+			assert.equal(anotherWorker.status, 'stopped');
+		});
+		it.todo(
+			'should release the job, if called when processing a job, and prevent releaseJob from setting the worker status to available afterwards'
+		);
+	});
+
 	describe('#getJob', () => {
 		describe('if status is available', () => {
 			it('should poll the queue for a job', async () => {
@@ -113,6 +133,8 @@ describe('Worker', () => {
 				await anotherWorker.start();
 				assert.equal(anotherWorker.status, 'processing');
 			});
+
+			it.todo('should get the currentJob value to that of the job');
 
 			describe('if the job is processed fine', () => {
 				it('should complete the job', async () => {
@@ -197,6 +219,7 @@ describe('Worker', () => {
 			it('should then attempt to get another job', async () => {
 				assert.equal(callCount, 2);
 			});
+			it.todo('should unset the currentJob value');
 		});
 
 		describe('#failJob', () => {
@@ -242,6 +265,7 @@ describe('Worker', () => {
 			it('should then attempt to get another job', async () => {
 				assert.equal(callCount, 2);
 			});
+			it.todo('should unset the currentJob value');
 		});
 
 		describe('#releaseJob', () => {
@@ -286,6 +310,7 @@ describe('Worker', () => {
 			it('should then attempt to get another job', async () => {
 				assert.equal(callCount, 2);
 			});
+			it.todo('should unset the currentJob value');
 		});
 	});
 });
