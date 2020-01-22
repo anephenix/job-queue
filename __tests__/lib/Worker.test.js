@@ -343,6 +343,7 @@ describe('Worker', () => {
 			it('should then attempt to get another job', async () => {
 				assert.equal(callCount, 2);
 			});
+
 			it('should unset the currentJob value', async () => {
 				assert.equal(anotherWorker.currentJob, null);
 			});

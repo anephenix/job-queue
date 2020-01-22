@@ -1,5 +1,9 @@
 # CHANGELOG
 
+### 1.1.0 - Wednesday 22nd January, 2020
+
+-   Changed Worker.stop() so that it will call Worker.releaseJob() to support interrupting a worker during processing.
+
 ### 1.0.3 - Thursday 16th January, 2020
 
 -   Added Worker.releaseJob(job) to support putting a job back on the queue when it is in the stage of processing.
