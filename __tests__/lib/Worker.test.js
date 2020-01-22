@@ -52,9 +52,26 @@ describe('Worker', () => {
 			await anotherWorker.stop();
 			assert.equal(anotherWorker.status, 'stopped');
 		});
-		it.todo(
-			'should release the job, if called when processing a job, and prevent releaseJob from setting the worker status to available afterwards'
-		);
+		it('should release the job, if called when processing a job, and prevent releaseJob from setting the worker status to available afterwards', async () => {
+			const anotherQueue = new Queue({
+				queueKey: 'another-test-example',
+				redis,
+			});
+			const job = { name: 'a job I must take' };
+			await anotherQueue.add(job);
+			const anotherWorker = new Worker(anotherQueue);
+			anotherWorker.processJob = async () => {};
+			await anotherWorker.start();
+			assert.equal(anotherWorker.status, 'available');
+			await delay(500);
+			await anotherWorker.stop();
+			assert.equal(anotherWorker.status, 'stopped');
+			const fetchedJob = await redis.lindexAsync(
+				anotherQueue.subQueueKeys.available,
+				-1
+			);
+			assert.deepEqual(JSON.parse(fetchedJob), job);
+		});
 	});
 
 	describe('#getJob', () => {
@@ -134,7 +151,18 @@ describe('Worker', () => {
 				assert.equal(anotherWorker.status, 'processing');
 			});
 
-			it.todo('should get the currentJob value to that of the job');
+			it('should set the currentJob value to that of the job', async () => {
+				const anotherQueue = new Queue({
+					queueKey: 'another-example-bam',
+					redis,
+				});
+				const job = { name: 'Example job' };
+				await anotherQueue.add(job);
+				const anotherWorker = new Worker(anotherQueue);
+				anotherWorker.completeJob = () => {};
+				await anotherWorker.start();
+				assert.deepEqual(anotherWorker.currentJob, job);
+			});
 
 			describe('if the job is processed fine', () => {
 				it('should complete the job', async () => {
@@ -219,7 +247,9 @@ describe('Worker', () => {
 			it('should then attempt to get another job', async () => {
 				assert.equal(callCount, 2);
 			});
-			it.todo('should unset the currentJob value');
+			it('should unset the currentJob value', async () => {
+				assert.equal(anotherWorker.currentJob, null);
+			});
 		});
 
 		describe('#failJob', () => {
@@ -265,7 +295,10 @@ describe('Worker', () => {
 			it('should then attempt to get another job', async () => {
 				assert.equal(callCount, 2);
 			});
-			it.todo('should unset the currentJob value');
+
+			it('should unset the currentJob value', async () => {
+				assert.equal(anotherWorker.currentJob, null);
+			});
 		});
 
 		describe('#releaseJob', () => {
@@ -310,7 +343,9 @@ describe('Worker', () => {
 			it('should then attempt to get another job', async () => {
 				assert.equal(callCount, 2);
 			});
-			it.todo('should unset the currentJob value');
+			it('should unset the currentJob value', async () => {
+				assert.equal(anotherWorker.currentJob, null);
+			});
 		});
 	});
 });
