@@ -3,6 +3,24 @@ const assert = require('assert');
 const Queue = require('../../lib/Queue');
 const redis = require('../redis.test.js');
 
+const prepareJob = async (queue, firstAction, subQueueKey) => {
+	const anotherJob = { name: 'Another example job' };
+	await queue.add(anotherJob);
+	await queue.take();
+	await queue[firstAction](anotherJob);
+
+	const processingRedisJob = await redis.lindexAsync(
+		queue.subQueueKeys.processing,
+		-1
+	);
+	const failedRedisJob = await redis.lindexAsync(
+		queue.subQueueKeys[subQueueKey],
+		-1
+	);
+	assert.equal(processingRedisJob, null);
+	assert.deepEqual(JSON.parse(failedRedisJob), anotherJob);
+};
+
 describe('Queue', () => {
 	let queue;
 	let job;
@@ -77,42 +95,15 @@ describe('Queue', () => {
 			assert.deepEqual(JSON.parse(completedRedisJob), parsedJob);
 		});
 	});
+
 	describe('failing a job', () => {
 		it('should move a job from the processing queue to the failed queue', async () => {
-			const anotherJob = { name: 'Another example job' };
-			await queue.add(anotherJob);
-			await queue.take();
-			await queue.fail(anotherJob);
-
-			const processingRedisJob = await redis.lindexAsync(
-				queue.subQueueKeys.processing,
-				-1
-			);
-			const failedRedisJob = await redis.lindexAsync(
-				queue.subQueueKeys.failed,
-				-1
-			);
-			assert.equal(processingRedisJob, null);
-			assert.deepEqual(JSON.parse(failedRedisJob), anotherJob);
+			await prepareJob(queue, 'fail', 'failed');
 		});
 	});
 	describe('releasing a job', () => {
 		it('should move a job from the processing queue to the available queue', async () => {
-			const anotherJob = { name: 'Another example job' };
-			await queue.add(anotherJob);
-			await queue.take();
-			await queue.release(anotherJob);
-
-			const processingRedisJob = await redis.lindexAsync(
-				queue.subQueueKeys.processing,
-				-1
-			);
-			const releasedRedisJob = await redis.lindexAsync(
-				queue.subQueueKeys.available,
-				-1
-			);
-			assert.equal(processingRedisJob, null);
-			assert.deepEqual(JSON.parse(releasedRedisJob), anotherJob);
+			await prepareJob(queue, 'release', 'available');
 		});
 	});
 	describe('flushing all jobs', () => {
