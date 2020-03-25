@@ -16,7 +16,7 @@
 	"license": "MIT",
 	"dependencies": {
 		"bluebird": "^3.7.2",
-		"redis": "^2.8.0"
+		"redis": "^3.0.2"
 	},
 	"devDependencies": {
 		"babel-eslint": "^10.1.0",
