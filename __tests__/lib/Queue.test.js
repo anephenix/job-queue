@@ -175,4 +175,39 @@ describe('Queue', () => {
 			assert.deepEqual(jobParam, job);
 		});
 	});
+
+	describe('count', () => {
+		const queueKey = 'another-example-queue';
+		const queue = new Queue({
+			queueKey,
+			redis,
+		});
+
+		beforeAll(async () => {
+			await queue.flushAll();
+			const initialCount = await queue.count('available');
+			assert.equal(initialCount, 0);
+			job = { name: 'example-job' };
+			await queue.add(job);
+		});
+
+		it('should return the number of jobs in a queue with a specific status', async () => {
+			const updatedCount = await queue.count('available');
+			assert.equal(updatedCount, 1);
+		});
+	});
+	describe('counts', () => {
+		it('should return the number of jobs in a queue, for each status', async () => {
+			job = { name: 'example-job' };
+			await queue.add(job);
+			const counts = await queue.counts();
+			assert.deepEqual(counts, {
+				available: 1,
+				processing: 0,
+				completed: 0,
+				failed: 0,
+			});
+			await queue.flushAll();
+		});
+	});
 });

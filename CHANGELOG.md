@@ -1,5 +1,9 @@
 # CHANGELOG
 
+### 1.3.0 - Monday 1st June, 2020
+
+-   Added the Queue.count and Queue.counts functions to list the number of jobs in a queue
+
 ### 1.2.0 - Monday 1st June, 2020
 
 -   Added the Queue.retry function to retry failed jobs
