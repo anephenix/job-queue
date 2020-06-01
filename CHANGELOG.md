@@ -1,5 +1,9 @@
 # CHANGELOG
 
+### 1.2.0 - Monday 1st June, 2020
+
+-   Added the Queue.retry function to retry failed jobs
+
 ### 1.1.0 - Wednesday 22nd January, 2020
 
 -   Changed Worker.stop() so that it will call Worker.releaseJob() to support interrupting a worker during processing.

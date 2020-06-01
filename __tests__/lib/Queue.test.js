@@ -95,7 +95,6 @@ describe('Queue', () => {
 			assert.deepEqual(JSON.parse(completedRedisJob), parsedJob);
 		});
 	});
-
 	describe('failing a job', () => {
 		it('should move a job from the processing queue to the failed queue', async () => {
 			await prepareJob(queue, 'fail', 'failed');
@@ -106,6 +105,30 @@ describe('Queue', () => {
 			await prepareJob(queue, 'release', 'available');
 		});
 	});
+
+	describe('retrying a job', () => {
+		it('should move a job from the failed queue to the available queue', async () => {
+			await queue.flushAll();
+			await prepareJob(queue, 'fail', 'failed');
+			const redisJob = await redis.lindexAsync(
+				queue.subQueueKeys.failed,
+				-1
+			);
+			const parsedJob = JSON.parse(redisJob);
+			await queue.retry(parsedJob);
+			const failedRedisJob = await redis.lindexAsync(
+				queue.subQueueKeys.failed,
+				-1
+			);
+			const availableRedisJob = await redis.lindexAsync(
+				queue.subQueueKeys.available,
+				-1
+			);
+			assert.equal(failedRedisJob, null);
+			assert.deepEqual(JSON.parse(availableRedisJob), parsedJob);
+		});
+	});
+
 	describe('flushing all jobs', () => {
 		it('should remove all jobs from all queues', async () => {
 			await queue.flushAll();
@@ -140,7 +163,7 @@ describe('Queue', () => {
 				redis,
 				hooks: {
 					add: {
-						pre: async job => {
+						pre: async (job) => {
 							jobParam = job;
 							return job;
 						},
