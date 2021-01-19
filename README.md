@@ -152,4 +152,4 @@ const queue = new Queue({
 
 ### License and Credits
 
-&copy;2020 Anephenix OÜ. Job Queue is licensed under the MIT license.
+&copy;2021 Anephenix OÜ. Job Queue is licensed under the MIT license.
