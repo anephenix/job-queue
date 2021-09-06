@@ -1,5 +1,9 @@
 # CHANGELOG
 
+### 1.3.1 - Monday 6th September, 2021
+
+-   Updated dependencies
+
 ### 1.3.0 - Monday 1st June, 2020
 
 -   Added the Queue.count and Queue.counts functions to list the number of jobs in a queue
