@@ -6,7 +6,8 @@
 	"scripts": {
 		"lint": "npx eslint .",
 		"test": "NODE_ENV=test jest --runInBand --coverage --forceExit",
-		"coveralls": "NODE_ENV=test jest --runInBand --coverage --forceExit --coverageReporters=text-lcov | coveralls"
+		"coveralls": "NODE_ENV=test jest --runInBand --coverage --forceExit --coverageReporters=text-lcov | coveralls",
+		"prepare": "husky install"
 	},
 	"keywords": [
 		"job",
@@ -21,14 +22,14 @@
 	},
 	"dependencies": {
 		"bluebird": "^3.7.2",
-		"redis": "^3.0.2"
+		"redis": "^3.1.2"
 	},
 	"devDependencies": {
 		"babel-eslint": "^10.1.0",
-		"coveralls": "^3.1.0",
-		"eslint": "^7.18.0",
-		"husky": "^4.3.8",
-		"jest": "^26.6.3",
-		"npm-upgrade": "^2.0.4"
+		"coveralls": "^3.1.1",
+		"eslint": "^7.32.0",
+		"husky": "^7.0.2",
+		"jest": "^27.1.0",
+		"npm-upgrade": "^3.0.0"
 	}
 }
