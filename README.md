@@ -1,7 +1,7 @@
 # Job Queue
 
-[![npm version](https://badge.fury.io/js/%40anephenix%2Fjob-queue.svg)](https://badge.fury.io/js/%40anephenix%2Fjob-queue) [![CircleCI](https://circleci.com/gh/anephenix/job-queue.svg?style=shield)](https://circleci.com/gh/anephenix/job-queue)
-[![Coverage Status](https://coveralls.io/repos/github/anephenix/job-queue/badge.svg?branch=master)](https://coveralls.io/github/anephenix/job-queue?branch=master)  [![Maintainability](https://api.codeclimate.com/v1/badges/8549f1da9906b66d02ea/maintainability)](https://codeclimate.com/github/anephenix/job-queue/maintainability)
+[![npm version](https://badge.fury.io/js/%40anephenix%2Fjob-queue.svg)](https://badge.fury.io/js/%40anephenix%2Fjob-queue)
+[![Coverage Status](https://coveralls.io/repos/github/anephenix/job-queue/badge.svg?branch=master)](https://coveralls.io/github/anephenix/job-queue?branch=master) [![Node.js CI](https://github.com/anephenix/job-queue/actions/workflows/node.js.yml/badge.svg)](https://github.com/anephenix/job-queue/actions/workflows/node.js.yml) [![Maintainability](https://api.codeclimate.com/v1/badges/8549f1da9906b66d02ea/maintainability)](https://codeclimate.com/github/anephenix/job-queue/maintainability)
 
 A Node.js Job Queue library using Redis.
 
@@ -134,11 +134,11 @@ const queue = new Queue({
 	redis,
 	hooks: {
 		add: {
-			pre: async job => {
+			pre: async (job) => {
 				// Do something with the job before it is added
 				return job;
 			},
-			post: async job => {
+			post: async (job) => {
 				// Do something with the job after it is added
 				return job;
 			},
