@@ -17,7 +17,7 @@ jobs:
       APP_ENV: test
       NODE_ENV: test
       CC_TEST_REPORTER_ID: d83276de03b0016003d9365783681c2c4398496b072fe2b1467d3a83d40aae05
-      COVERALLS_REPO_TOKEN: B2usroJKQLr3RTHcU7nEOgf3Eo65n8UOz
+      COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
     strategy:
       matrix:
         node-version: [14.x, 16.x]
