@@ -1,12 +1,10 @@
-const delay = duration => new Promise(resolve => setTimeout(resolve, duration));
+const delay = (duration) =>
+	new Promise((resolve) => setTimeout(resolve, duration));
 const redis = require('../redis.test.js');
 const assert = require('assert');
 
 const checkJobsMatch = async (queue, job, subQueueKey) => {
-	const fetchedJob = await redis.lindexAsync(
-		queue.subQueueKeys[subQueueKey],
-		-1
-	);
+	const fetchedJob = await redis.lIndex(queue.subQueueKeys[subQueueKey], -1);
 	assert.deepEqual(JSON.parse(fetchedJob), job);
 };
 

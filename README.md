@@ -25,14 +25,11 @@ npm i @anephenix/job-queue
 
 ### Usage
 
-You will need a create a Redis client that is promisified with bluebird.
+You will need a create a Redis client (v4 of Redis)
 
 ```javascript
 // Dependencies
-const bluebird = require('bluebird');
 const redisLib = require('redis');
-bluebird.promisifyAll(redisLib.RedisClient.prototype);
-bluebird.promisifyAll(redisLib.Multi.prototype);
 const redisConfig = {};
 const redis = redisLib.createClient(redisConfig);
 ```
@@ -152,4 +149,4 @@ const queue = new Queue({
 
 ### License and Credits
 
-&copy;2021 Anephenix OÜ. Job Queue is licensed under the MIT license.
+&copy;2022 Anephenix OÜ. Job Queue is licensed under the MIT license.

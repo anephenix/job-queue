@@ -13,7 +13,7 @@ describe('Worker', () => {
 	let worker;
 	let queue;
 
-	beforeAll(() => {
+	beforeAll(async () => {
 		const queueKey = 'example-queue';
 		queue = new Queue({ queueKey, redis });
 		worker = new Worker(queue);
@@ -63,7 +63,7 @@ describe('Worker', () => {
 			await delay(500);
 			await anotherWorker.stop();
 			assert.equal(anotherWorker.status, 'stopped');
-			const fetchedJob = await redis.lindexAsync(
+			const fetchedJob = await redis.lIndex(
 				anotherQueue.subQueueKeys.available,
 				-1
 			);
@@ -172,7 +172,7 @@ describe('Worker', () => {
 					const anotherWorker = new Worker(anotherQueue);
 					await anotherWorker.start();
 					await delay(200);
-					const fetchedJob = await redis.lindexAsync(
+					const fetchedJob = await redis.lIndex(
 						anotherQueue.subQueueKeys.completed,
 						-1
 					);
@@ -195,7 +195,7 @@ describe('Worker', () => {
 					};
 					await anotherWorker.start();
 					await delay(500);
-					const fetchedJob = await redis.lindexAsync(
+					const fetchedJob = await redis.lIndex(
 						anotherQueue.subQueueKeys.failed,
 						-1
 					);

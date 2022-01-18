@@ -9,11 +9,11 @@ const prepareJob = async (queue, firstAction, subQueueKey) => {
 	await queue.take();
 	await queue[firstAction](anotherJob);
 
-	const processingRedisJob = await redis.lindexAsync(
+	const processingRedisJob = await redis.lIndex(
 		queue.subQueueKeys.processing,
 		-1
 	);
-	const failedRedisJob = await redis.lindexAsync(
+	const failedRedisJob = await redis.lIndex(
 		queue.subQueueKeys[subQueueKey],
 		-1
 	);
@@ -25,7 +25,7 @@ describe('Queue', () => {
 	let queue;
 	let job;
 
-	beforeAll(() => {
+	beforeAll(async () => {
 		const queueKey = 'example-queue';
 		queue = new Queue({ queueKey, redis });
 		job = { name: 'example-job' };
@@ -68,7 +68,7 @@ describe('Queue', () => {
 		it('should move a job from the available queue to the processing queue', async () => {
 			const fetchedJob = await queue.take();
 			assert.deepEqual(job, fetchedJob);
-			const redisJob = await redis.lindexAsync(
+			const redisJob = await redis.lIndex(
 				queue.subQueueKeys.processing,
 				-1
 			);
@@ -77,17 +77,17 @@ describe('Queue', () => {
 	});
 	describe('completing a job', () => {
 		it('should move a job from the processing queue to the completed queue', async () => {
-			const redisJob = await redis.lindexAsync(
+			const redisJob = await redis.lIndex(
 				queue.subQueueKeys.processing,
 				-1
 			);
 			const parsedJob = JSON.parse(redisJob);
 			await queue.complete(parsedJob);
-			const processingRedisJob = await redis.lindexAsync(
+			const processingRedisJob = await redis.lIndex(
 				queue.subQueueKeys.processing,
 				-1
 			);
-			const completedRedisJob = await redis.lindexAsync(
+			const completedRedisJob = await redis.lIndex(
 				queue.subQueueKeys.completed,
 				-1
 			);
@@ -110,17 +110,14 @@ describe('Queue', () => {
 		it('should move a job from the failed queue to the available queue', async () => {
 			await queue.flushAll();
 			await prepareJob(queue, 'fail', 'failed');
-			const redisJob = await redis.lindexAsync(
-				queue.subQueueKeys.failed,
-				-1
-			);
+			const redisJob = await redis.lIndex(queue.subQueueKeys.failed, -1);
 			const parsedJob = JSON.parse(redisJob);
 			await queue.retry(parsedJob);
-			const failedRedisJob = await redis.lindexAsync(
+			const failedRedisJob = await redis.lIndex(
 				queue.subQueueKeys.failed,
 				-1
 			);
-			const availableRedisJob = await redis.lindexAsync(
+			const availableRedisJob = await redis.lIndex(
 				queue.subQueueKeys.available,
 				-1
 			);
@@ -132,22 +129,19 @@ describe('Queue', () => {
 	describe('flushing all jobs', () => {
 		it('should remove all jobs from all queues', async () => {
 			await queue.flushAll();
-			const available = await redis.lindexAsync(
+			const available = await redis.lIndex(
 				queue.subQueueKeys.available,
 				-1
 			);
-			const processing = await redis.lindexAsync(
+			const processing = await redis.lIndex(
 				queue.subQueueKeys.processing,
 				-1
 			);
-			const completed = await redis.lindexAsync(
+			const completed = await redis.lIndex(
 				queue.subQueueKeys.completed,
 				-1
 			);
-			const failed = await redis.lindexAsync(
-				queue.subQueueKeys.failed,
-				-1
-			);
+			const failed = await redis.lIndex(queue.subQueueKeys.failed, -1);
 			assert.equal(available, null);
 			assert.equal(processing, null);
 			assert.equal(completed, null);
