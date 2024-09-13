@@ -6,8 +6,7 @@
 	"scripts": {
 		"lint": "npx eslint .",
 		"test": "NODE_ENV=test jest --runInBand --coverage --forceExit",
-		"coveralls": "NODE_ENV=test jest --runInBand --coverage --forceExit --coverageReporters=text-lcov | coveralls",
-		"prepare": "husky install"
+		"cover": "NODE_ENV=test jest --runInBand --coverage --forceExit --coverageReporters=text-lcov"
 	},
 	"keywords": [
 		"job",
@@ -27,7 +26,6 @@
 		"@babel/eslint-parser": "^7.25.1",
 		"@eslint/eslintrc": "^3.1.0",
 		"@eslint/js": "^9.10.0",
-		"coveralls": "^3.1.1",
 		"eslint": "^9.10.0",
 		"globals": "^15.9.0",
 		"husky": "^9.1.6",

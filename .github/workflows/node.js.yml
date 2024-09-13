@@ -16,7 +16,6 @@ jobs:
             APP_ENV: test
             NODE_ENV: test
             CC_TEST_REPORTER_ID: d83276de03b0016003d9365783681c2c4398496b072fe2b1467d3a83d40aae05
-            COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
         strategy:
             matrix:
                 node-version: [20.x, 22.x]
@@ -38,5 +37,5 @@ jobs:
             - run: ./cc-test-reporter before-build
             - run: npm t
             - run: ./cc-test-reporter after-build
-            - run: npm run coveralls
+            - run: npm run cover
               if: github.event_name != 'pull_request'
