@@ -1,15 +1,30 @@
+import { Job } from './types';
+
+interface Queue {
+	take(): Promise<Job | null>;
+	complete(job: Job): Promise<void>;
+	fail(job: Job): Promise<void>;
+	release(job: Job): Promise<void>;
+}
+
 class Worker {
-	constructor(queue) {
+	queue: Queue;
+	status: 'available' | 'processing' | 'stopped';
+	pollTimeout: number;
+	currentJob: Job | null;
+
+	constructor(queue: Queue) {
 		this.queue = queue;
 		this.status = 'available';
 		this.pollTimeout = 1000;
+		this.currentJob = null;
 	}
 
-	async start() {
+	async start(): Promise<void> {
 		return await this.getJob();
 	}
 
-	async stop() {
+	async stop(): Promise<void> {
 		this.status = 'stopped';
 		if (this.currentJob) {
 			const skipSettingStatus = true;
@@ -17,53 +32,52 @@ class Worker {
 		}
 	}
 
-	async getJob() {
-		const self = this;
+	async getJob(): Promise<void> {
 		if (this.status === 'available') {
 			const job = await this.queue.take();
 			if (job) {
-				self.currentJob = job;
-				await self.processJob(job);
+				this.currentJob = job;
+				await this.processJob(job);
 			} else {
 				setTimeout(async () => {
-					await self.getJob();
+					await this.getJob();
 				}, this.pollTimeout);
 			}
 		}
-		return;
 	}
 
-	async processJob(job) {
+	async processJob(job: Job): Promise<void> {
 		this.status = 'processing';
 		try {
 			await this.completeJob(job);
 		} catch (error) {
-			error;
 			// TODO - find a way to bind the error to the job, but to be fair this function gets overridden anyway I think
 			await this.failJob(job);
 		}
-		return;
 	}
 
-	async concludeJob(job, queueCommand, skipSettingStatus) {
+	async concludeJob(
+		job: Job,
+		queueCommand: keyof Queue,
+		skipSettingStatus?: boolean
+	): Promise<void> {
 		this.currentJob = null;
 		await this.queue[queueCommand](job);
 		if (!skipSettingStatus) this.status = 'available';
 		await this.getJob();
-		return;
 	}
 
-	async completeJob(job, skipSettingStatus) {
+	async completeJob(job: Job, skipSettingStatus?: boolean): Promise<void> {
 		return await this.concludeJob(job, 'complete', skipSettingStatus);
 	}
 
-	async failJob(job, skipSettingStatus) {
+	async failJob(job: Job, skipSettingStatus?: boolean): Promise<void> {
 		return await this.concludeJob(job, 'fail', skipSettingStatus);
 	}
 
-	async releaseJob(job, skipSettingStatus) {
+	async releaseJob(job: Job, skipSettingStatus?: boolean): Promise<void> {
 		return await this.concludeJob(job, 'release', skipSettingStatus);
 	}
 }
 
-module.exports = Worker;
+export default Worker;

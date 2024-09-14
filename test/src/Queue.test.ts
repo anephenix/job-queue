@@ -1,14 +1,19 @@
 // Dependencies
-const assert = require('assert');
-const Queue = require('../../lib/Queue');
-const redis = require('../redis.test.js');
-const { before, after } = require('mocha');
+import assert from 'assert';
+import Queue from '../../src/Queue';
+import redis from '../redis.test';
+import { before, after } from 'mocha';
+import { Job } from '../../src/types';
 
-const prepareJob = async (queue, firstAction, subQueueKey) => {
-	const anotherJob = { name: 'Another example job' };
+const prepareJob = async (
+	queue: Queue,
+	firstAction: keyof Queue,
+	subQueueKey: keyof Queue['subQueueKeys']
+): Promise<void> => {
+	const anotherJob: Job = { name: 'Another example job' };
 	await queue.add(anotherJob);
 	await queue.take();
-	await queue[firstAction](anotherJob);
+	await (queue as any)[firstAction](anotherJob);
 
 	const processingRedisJob = await redis.lIndex(
 		queue.subQueueKeys.processing,
@@ -18,13 +23,16 @@ const prepareJob = async (queue, firstAction, subQueueKey) => {
 		queue.subQueueKeys[subQueueKey],
 		-1
 	);
+	if (!failedRedisJob) {
+		throw new Error('Jobs not found in queue');
+	}
 	assert.equal(processingRedisJob, null);
 	assert.deepEqual(JSON.parse(failedRedisJob), anotherJob);
 };
 
 describe('Queue', () => {
-	let queue;
-	let job;
+	let queue: Queue;
+	let job: Job;
 
 	before(async () => {
 		const queueKey = 'example-queue';
@@ -40,7 +48,7 @@ describe('Queue', () => {
 		it('should set the redis client', () => {
 			assert.deepEqual(redis, queue.redis);
 		});
-		it('should have a set of subQeueKeys for each list', () => {
+		it('should have a set of subQueueKeys for each list', () => {
 			assert.deepEqual(queue.subQueueKeys, {
 				available: `example-queue-available`,
 				processing: `example-queue-processing`,
@@ -78,6 +86,9 @@ describe('Queue', () => {
 				queue.subQueueKeys.processing,
 				-1
 			);
+			if (!redisJob) {
+				throw new Error('Job not found in queue');
+			}
 			assert.deepEqual(JSON.parse(redisJob), fetchedJob);
 		});
 	});
@@ -87,6 +98,9 @@ describe('Queue', () => {
 				queue.subQueueKeys.processing,
 				-1
 			);
+			if (!redisJob) {
+				throw new Error('Job not found in queue');
+			}
 			const parsedJob = JSON.parse(redisJob);
 			await queue.complete(parsedJob);
 			const processingRedisJob = await redis.lIndex(
@@ -97,6 +111,9 @@ describe('Queue', () => {
 				queue.subQueueKeys.completed,
 				-1
 			);
+			if (!completedRedisJob) {
+				throw new Error('completedRedisJob not found in queue');
+			}
 			assert.equal(processingRedisJob, null);
 			assert.deepEqual(JSON.parse(completedRedisJob), parsedJob);
 		});
@@ -117,6 +134,9 @@ describe('Queue', () => {
 			await queue.flushAll();
 			await prepareJob(queue, 'fail', 'failed');
 			const redisJob = await redis.lIndex(queue.subQueueKeys.failed, -1);
+			if (!redisJob) {
+				throw new Error('Job not found in queue');
+			}
 			const parsedJob = JSON.parse(redisJob);
 			await queue.retry(parsedJob);
 			const failedRedisJob = await redis.lIndex(
@@ -127,6 +147,9 @@ describe('Queue', () => {
 				queue.subQueueKeys.available,
 				-1
 			);
+			if (!availableRedisJob) {
+				throw new Error('Jobs not found in queue');
+			}
 			assert.equal(failedRedisJob, null);
 			assert.deepEqual(JSON.parse(availableRedisJob), parsedJob);
 		});
@@ -157,7 +180,7 @@ describe('Queue', () => {
 	describe('hooks', () => {
 		it('should allow the developer to add pre and post hooks to called actions', async () => {
 			const queueKey = 'another-example-queue';
-			let jobParam = null;
+			let jobParam: Job | undefined = undefined;
 			const queue = new Queue({
 				queueKey,
 				redis,
@@ -165,7 +188,7 @@ describe('Queue', () => {
 					add: {
 						pre: async (job) => {
 							jobParam = job;
-							return job;
+							return Promise.resolve();
 						},
 					},
 				},

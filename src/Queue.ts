@@ -1,5 +1,12 @@
+import { Job, Hook, Hooks, QueueOptions } from './types';
+import { RedisClientType } from 'redis';
+
 class Queue {
-	constructor({ queueKey, redis, hooks }) {
+	redis: RedisClientType;
+	subQueueKeys: { [key: string]: string };
+	hooks: Hooks;
+
+	constructor({ queueKey, redis, hooks }: QueueOptions) {
 		this.redis = redis;
 		this.subQueueKeys = {
 			available: `${queueKey}-available`,
@@ -24,7 +31,7 @@ class Queue {
 		})();
 	}
 
-	async connect() {
+	private async connect(): Promise<void> {
 		try {
 			await this.redis.ping();
 		} catch {
@@ -32,36 +39,40 @@ class Queue {
 		}
 	}
 
-	async disconnect() {
+	async disconnect(): Promise<string> {
 		return await this.redis.quit();
 	}
 
-	async callHook(action, stage, job) {
+	private async callHook(
+		action: keyof Hooks,
+		stage: keyof Hook,
+		job?: Job | undefined
+	): Promise<void> {
 		if (typeof this.hooks[action][stage] === 'function') {
-			return await this.hooks[action][stage](job);
-		} else {
-			return;
+			return await this.hooks[action][stage]!(job);
 		}
 	}
 
-	async add(job) {
+	async add(job: Job): Promise<void> {
 		await this.callHook('add', 'pre', job);
 		const payload = JSON.stringify(job);
 		await this.redis.rPush(this.subQueueKeys.available, payload);
 		return await this.callHook('add', 'post', job);
 	}
 
-	async inspect(keyType = 'available') {
+	async inspect(
+		keyType: keyof Queue['subQueueKeys'] = 'available'
+	): Promise<any | null> {
 		const job = await this.redis.lIndex(this.subQueueKeys[keyType], -1);
 		if (!job) return null;
 		return JSON.parse(job);
 	}
 
-	async count(keyType) {
+	async count(keyType: keyof Queue['subQueueKeys']): Promise<number> {
 		return await this.redis.lLen(this.subQueueKeys[keyType]);
 	}
 
-	async counts() {
+	async counts(): Promise<{ [key: string]: number }> {
 		const [available, processing, failed, completed] = await Promise.all([
 			this.count('available'),
 			this.count('processing'),
@@ -76,7 +87,7 @@ class Queue {
 		};
 	}
 
-	async take() {
+	async take(): Promise<any | null> {
 		await this.callHook('take', 'pre');
 		const job = await this.redis.lPop(this.subQueueKeys.available);
 		if (!job) {
@@ -88,7 +99,12 @@ class Queue {
 		return JSON.parse(job);
 	}
 
-	async conclude(job, callHookAction, subQueueKey, fromSubQueueKey) {
+	private async conclude(
+		job: Job,
+		callHookAction: keyof Hooks,
+		subQueueKey: keyof Queue['subQueueKeys'],
+		fromSubQueueKey?: keyof Queue['subQueueKeys']
+	): Promise<void> {
 		await this.callHook(callHookAction, 'pre', job);
 		const payload = JSON.stringify(job);
 		await this.redis.lRem(
@@ -100,23 +116,23 @@ class Queue {
 		return await this.callHook(callHookAction, 'post', job);
 	}
 
-	async complete(job) {
+	async complete(job: Job): Promise<void> {
 		return await this.conclude(job, 'complete', 'completed');
 	}
 
-	async fail(job) {
+	async fail(job: Job): Promise<void> {
 		return await this.conclude(job, 'fail', 'failed');
 	}
 
-	async release(job) {
+	async release(job: Job): Promise<void> {
 		return await this.conclude(job, 'release', 'available');
 	}
 
-	async retry(job) {
+	async retry(job: Job): Promise<void> {
 		return await this.conclude(job, 'retry', 'available', 'failed');
 	}
 
-	async flushAll() {
+	async flushAll(): Promise<void> {
 		await this.callHook('flushAll', 'pre');
 		for (const subQueueKey of Object.values(this.subQueueKeys)) {
 			await this.redis.del(subQueueKey);
@@ -125,4 +141,4 @@ class Queue {
 	}
 }
 
-module.exports = Queue;
+export default Queue;

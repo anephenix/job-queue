@@ -1,18 +1,17 @@
-// Dependencies
-const assert = require('assert');
-const Queue = require('../../lib/Queue');
-const Worker = require('../../lib/Worker');
-const redis = require('../redis.test.js');
-const { before } = require('mocha');
-const {
+import assert from 'assert';
+import Queue from '../../src/Queue';
+import Worker from '../../src/Worker';
+import redis from '../redis.test';
+import { before } from 'mocha';
+import {
 	delay,
 	checkJobsMatch,
 	incrementCallCountOrReturnJob,
-} = require('../helpers/index.test');
+} from '../helpers/index.test';
 
 describe('Worker', () => {
-	let worker;
-	let queue;
+	let worker: Worker;
+	let queue: Queue;
 
 	before(async () => {
 		const queueKey = 'example-queue';
@@ -32,9 +31,12 @@ describe('Worker', () => {
 
 	describe('#start', () => {
 		it('should get a job', async () => {
-			let called = false;
+			let called: boolean = false;
 			const anotherWorker = new Worker(queue);
-			anotherWorker.getJob = () => (called = true);
+			anotherWorker.getJob = () => {
+				called = true;
+				return Promise.resolve();
+			};
 			await anotherWorker.start();
 			assert(called);
 		});
@@ -68,6 +70,9 @@ describe('Worker', () => {
 				anotherQueue.subQueueKeys.available,
 				-1
 			);
+			if (!fetchedJob) {
+				throw new Error('Job not found in queue');
+			}
 			assert.deepEqual(JSON.parse(fetchedJob), job);
 		});
 	});
@@ -146,7 +151,9 @@ describe('Worker', () => {
 				const job = { name: 'Example job' };
 				await anotherQueue.add(job);
 				const anotherWorker = new Worker(anotherQueue);
-				anotherWorker.completeJob = () => {};
+				anotherWorker.completeJob = () => {
+					return Promise.resolve();
+				};
 				await anotherWorker.start();
 				assert.equal(anotherWorker.status, 'processing');
 			});
@@ -159,7 +166,9 @@ describe('Worker', () => {
 				const job = { name: 'Example job' };
 				await anotherQueue.add(job);
 				const anotherWorker = new Worker(anotherQueue);
-				anotherWorker.completeJob = () => {};
+				anotherWorker.completeJob = () => {
+					return Promise.resolve();
+				};
 				await anotherWorker.start();
 				assert.deepEqual(anotherWorker.currentJob, job);
 			});
@@ -179,6 +188,9 @@ describe('Worker', () => {
 						anotherQueue.subQueueKeys.completed,
 						-1
 					);
+					if (!fetchedJob) {
+						throw new Error('Job not found in queue');
+					}
 					assert.deepEqual(JSON.parse(fetchedJob), job);
 				});
 			});
@@ -202,6 +214,9 @@ describe('Worker', () => {
 						anotherQueue.subQueueKeys.failed,
 						-1
 					);
+					if (!fetchedJob) {
+						throw new Error('Job not found in queue');
+					}
 					assert.deepEqual(JSON.parse(fetchedJob), job);
 				});
 			});
