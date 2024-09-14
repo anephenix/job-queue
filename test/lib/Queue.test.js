@@ -2,6 +2,7 @@
 const assert = require('assert');
 const Queue = require('../../lib/Queue');
 const redis = require('../redis.test.js');
+const { before, after } = require('mocha');
 
 const prepareJob = async (queue, firstAction, subQueueKey) => {
 	const anotherJob = { name: 'Another example job' };
@@ -25,11 +26,16 @@ describe('Queue', () => {
 	let queue;
 	let job;
 
-	beforeAll(async () => {
+	before(async () => {
 		const queueKey = 'example-queue';
 		queue = new Queue({ queueKey, redis });
 		job = { name: 'example-job' };
 	});
+
+	after(async () => {
+		return await queue.disconnect();
+	});
+
 	describe('creating an instance', () => {
 		it('should set the redis client', () => {
 			assert.deepEqual(redis, queue.redis);
@@ -177,7 +183,7 @@ describe('Queue', () => {
 			redis,
 		});
 
-		beforeAll(async () => {
+		before(async () => {
 			await queue.flushAll();
 			const initialCount = await queue.count('available');
 			assert.equal(initialCount, 0);

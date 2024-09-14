@@ -3,6 +3,7 @@ const assert = require('assert');
 const Queue = require('../../lib/Queue');
 const Worker = require('../../lib/Worker');
 const redis = require('../redis.test.js');
+const { before } = require('mocha');
 const {
 	delay,
 	checkJobsMatch,
@@ -13,7 +14,7 @@ describe('Worker', () => {
 	let worker;
 	let queue;
 
-	beforeAll(async () => {
+	before(async () => {
 		const queueKey = 'example-queue';
 		queue = new Queue({ queueKey, redis });
 		worker = new Worker(queue);
@@ -73,7 +74,8 @@ describe('Worker', () => {
 
 	describe('#getJob', () => {
 		describe('if status is available', () => {
-			it('should poll the queue for a job', async () => {
+			it('should poll the queue for a job', async function () {
+				this.timeout(5000);
 				let callCount = 0;
 				const anotherQueue = new Queue({
 					queueKey: 'another-example',
@@ -89,7 +91,8 @@ describe('Worker', () => {
 				assert.equal(callCount, 2);
 				await anotherWorker.stop();
 			});
-			it('should stop polling that queue once it has a job', async () => {
+			it('should stop polling that queue once it has a job', async function () {
+				this.timeout(5000);
 				let callCount = 0;
 				let processJobCalled = false;
 				const job = { name: 'Example job' };
@@ -210,7 +213,7 @@ describe('Worker', () => {
 			let anotherWorker;
 			let callCount = 0;
 
-			beforeAll(async () => {
+			before(async () => {
 				anotherQueue = new Queue({
 					queueKey: 'another-example',
 					redis,
@@ -219,10 +222,8 @@ describe('Worker', () => {
 				await anotherQueue.add(job);
 				anotherWorker = new Worker(anotherQueue);
 				anotherWorker.queue.take = async () => {
-					const {
-						newCallCount,
-						result,
-					} = incrementCallCountOrReturnJob(callCount, job);
+					const { newCallCount, result } =
+						incrementCallCountOrReturnJob(callCount, job);
 					callCount = newCallCount;
 					return result;
 				};
@@ -250,7 +251,7 @@ describe('Worker', () => {
 			let anotherWorker;
 			let callCount = 0;
 
-			beforeAll(async () => {
+			before(async () => {
 				anotherQueue = new Queue({
 					queueKey: 'another-example',
 					redis,
@@ -259,10 +260,8 @@ describe('Worker', () => {
 				await anotherQueue.add(job);
 				anotherWorker = new Worker(anotherQueue);
 				anotherWorker.queue.take = async () => {
-					const {
-						newCallCount,
-						result,
-					} = incrementCallCountOrReturnJob(callCount, job);
+					const { newCallCount, result } =
+						incrementCallCountOrReturnJob(callCount, job);
 					callCount = newCallCount;
 					return result;
 				};
@@ -294,7 +293,7 @@ describe('Worker', () => {
 			let anotherWorker;
 			let callCount = 0;
 
-			beforeAll(async () => {
+			before(async () => {
 				anotherQueue = new Queue({
 					queueKey: 'another-example',
 					redis,
@@ -303,10 +302,8 @@ describe('Worker', () => {
 				await anotherQueue.add(job);
 				anotherWorker = new Worker(anotherQueue);
 				anotherWorker.queue.take = async () => {
-					const {
-						newCallCount,
-						result,
-					} = incrementCallCountOrReturnJob(callCount, job);
+					const { newCallCount, result } =
+						incrementCallCountOrReturnJob(callCount, job);
 					callCount = newCallCount;
 					return result;
 				};
