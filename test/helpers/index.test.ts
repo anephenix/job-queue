@@ -1,11 +1,19 @@
-const delay = (duration: number): Promise<void> =>
-	new Promise((resolve) => setTimeout(resolve, duration));
 import redis from '../redis.test';
 import assert from 'assert';
 
+// Types and Interfaces
 interface Queue {
 	subQueueKeys: { [key: string]: string };
 }
+
+interface IncrementCallCountResult {
+	newCallCount: number;
+	result: any;
+}
+
+// Helper functions
+const delay = (duration: number): Promise<void> =>
+	new Promise((resolve) => setTimeout(resolve, duration));
 
 const checkJobsMatch = async (
 	queue: Queue,
@@ -18,11 +26,6 @@ const checkJobsMatch = async (
 	}
 	assert.deepEqual(JSON.parse(fetchedJob), job);
 };
-
-interface IncrementCallCountResult {
-	newCallCount: number;
-	result: any;
-}
 
 const incrementCallCountOrReturnJob = (
 	callCount: number,
