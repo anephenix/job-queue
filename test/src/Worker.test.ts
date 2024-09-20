@@ -1,7 +1,8 @@
 import assert from 'assert';
 import Queue from '../../src/Queue';
 import Worker from '../../src/Worker';
-import redis from '../redis.test';
+import { RedisClientType } from 'redis';
+import { getClient } from '../redis.test';
 import { before } from 'mocha';
 import {
 	delay,
@@ -12,6 +13,7 @@ import {
 describe('Worker', () => {
 	let worker: Worker;
 	let queue: Queue;
+	let redis: RedisClientType = getClient();
 
 	before(async () => {
 		const queueKey = 'example-queue';
@@ -60,10 +62,11 @@ describe('Worker', () => {
 			const job = { name: 'a job I must take' };
 			await anotherQueue.add(job);
 			const anotherWorker = new Worker(anotherQueue);
+			anotherWorker.pollTimeout = 5;
 			anotherWorker.processJob = async () => {};
 			await anotherWorker.start();
 			assert.equal(anotherWorker.status, 'available');
-			await delay(500);
+			await delay(anotherWorker.pollTimeout * 0.5);
 			await anotherWorker.stop();
 			assert.equal(anotherWorker.status, 'stopped');
 			const fetchedJob = await redis.lIndex(
@@ -80,7 +83,6 @@ describe('Worker', () => {
 	describe('#getJob', () => {
 		describe('if status is available', () => {
 			it('should poll the queue for a job', async function () {
-				this.timeout(5000);
 				let callCount = 0;
 				const anotherQueue = new Queue({
 					queueKey: 'another-example',
@@ -91,13 +93,14 @@ describe('Worker', () => {
 					return null;
 				};
 				const anotherWorker = new Worker(anotherQueue);
+				anotherWorker.pollTimeout = 5;
 				await anotherWorker.getJob();
-				await delay(2000);
-				assert.equal(callCount, 2);
+				const numberOfTries = 2;
+				await delay(anotherWorker.pollTimeout * 2);
+				assert.equal(callCount, numberOfTries);
 				await anotherWorker.stop();
 			});
 			it('should stop polling that queue once it has a job', async function () {
-				this.timeout(5000);
 				let callCount = 0;
 				let processJobCalled = false;
 				const job = { name: 'Example job' };
@@ -114,11 +117,12 @@ describe('Worker', () => {
 					}
 				};
 				const anotherWorker = new Worker(anotherQueue);
+				anotherWorker.pollTimeout = 5;
 				anotherWorker.processJob = async () => {
 					processJobCalled = true;
 				};
 				await anotherWorker.getJob();
-				await delay(3000);
+				await delay(3 * anotherWorker.pollTimeout);
 				assert.equal(callCount, 1);
 				assert(processJobCalled);
 			});
@@ -183,7 +187,7 @@ describe('Worker', () => {
 					await anotherQueue.add(job);
 					const anotherWorker = new Worker(anotherQueue);
 					await anotherWorker.start();
-					await delay(200);
+					await delay(2);
 					const fetchedJob = await redis.lIndex(
 						anotherQueue.subQueueKeys.completed,
 						-1
@@ -209,7 +213,7 @@ describe('Worker', () => {
 						throw new Error('Something');
 					};
 					await anotherWorker.start();
-					await delay(500);
+					await delay(2);
 					const fetchedJob = await redis.lIndex(
 						anotherQueue.subQueueKeys.failed,
 						-1

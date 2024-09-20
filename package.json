@@ -7,7 +7,7 @@
 		"build": "tsc --project tsconfig.json",
 		"cover": "NODE_ENV=test npx nyc --reporter=lcov npm t",
 		"lint": "npx eslint .",
-		"test": "NODE_ENV=test npx mocha --require ts-node/register --extensions ts,tsx test/**/* --exit",
+		"test": "NODE_ENV=test npx mocha --require ts-node/register --require test/hooks.ts --extensions ts,tsx test/**/* --exit",
 		"watch": "tsc --project tsconfig.json --watch"
 	},
 	"keywords": [

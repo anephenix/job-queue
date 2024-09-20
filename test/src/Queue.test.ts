@@ -1,8 +1,9 @@
 // Dependencies
 import assert from 'assert';
 import Queue from '../../src/Queue';
-import redis from '../redis.test';
-import { before, after } from 'mocha';
+import { RedisClientType } from 'redis';
+import { getClient } from '../redis.test';
+import { before } from 'mocha';
 import { Job } from '../../src/types';
 
 const prepareJob = async (
@@ -14,6 +15,7 @@ const prepareJob = async (
 	await queue.add(anotherJob);
 	await queue.take();
 	await (queue as any)[firstAction](anotherJob);
+	const redis = getClient();
 
 	const processingRedisJob = await redis.lIndex(
 		queue.subQueueKeys.processing,
@@ -33,15 +35,12 @@ const prepareJob = async (
 describe('Queue', () => {
 	let queue: Queue;
 	let job: Job;
+	let redis: RedisClientType = getClient();
 
 	before(async () => {
 		const queueKey = 'example-queue';
 		queue = new Queue({ queueKey, redis });
 		job = { name: 'example-job' };
-	});
-
-	after(async () => {
-		return await queue.disconnect();
 	});
 
 	describe('creating an instance', () => {
