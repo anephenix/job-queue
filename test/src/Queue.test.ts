@@ -1,10 +1,11 @@
 // Dependencies
 import assert from 'assert';
 import Queue from '../../src/Queue';
-import { RedisClientType } from 'redis';
+import { createClient, RedisClientType } from 'redis';
 import { getClient } from '../redis.test';
 import { before } from 'mocha';
 import { Job } from '../../src/types';
+import { delayUntil } from '../helpers/index.test';
 
 const prepareJob = async (
 	queue: Queue,
@@ -230,6 +231,23 @@ describe('Queue', () => {
 				failed: 0,
 			});
 			await queue.flushAll();
+		});
+	});
+
+	describe('disconnect', () => {
+		it('should disconnect from the redis server', async () => {
+			const anotherRedisConnection: RedisClientType = createClient();
+			await anotherRedisConnection.connect();
+			const checkIfClientIsReady = async () =>
+				anotherRedisConnection.isReady;
+			await delayUntil(checkIfClientIsReady, 200);
+			const anotherQueue = new Queue({
+				queueKey: 'other-queue',
+				redis: anotherRedisConnection,
+			});
+
+			await anotherQueue.disconnect();
+			assert.equal(anotherRedisConnection.isOpen, false);
 		});
 	});
 });
