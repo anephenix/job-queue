@@ -1,5 +1,9 @@
 # CHANGELOG
 
+### 1.3.6 - Monday 13th January, 2025
+
+- More tweaks to the workflow files
+
 ### 1.3.5 - Monday 13th January, 2025
 
 - Attempted fix for the workflow build
