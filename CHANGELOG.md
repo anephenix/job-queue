@@ -1,5 +1,9 @@
 # CHANGELOG
 
+### 1.3.5 - Monday 13th January, 2025
+
+- Attempted fix for the workflow build
+
 ### 1.3.4 - Monday 13th January, 2025
 
 - Merge pull request #68 from anephenix/dependabot/npm_and_yarn/typescript-5.7.3
