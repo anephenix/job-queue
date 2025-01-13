@@ -1,5 +1,14 @@
 # CHANGELOG
 
+### 1.3.4 - Monday 13th January, 2025
+
+- Merge pull request #68 from anephenix/dependabot/npm_and_yarn/typescript-5.7.3
+- Merge pull request #66 from anephenix/dependabot/npm_and_yarn/babel/eslint-parser-7.26.5
+- Merge pull request #65 from anephenix/dependabot/npm_and_yarn/eslint-9.18.0
+- Bump typescript from 5.7.2 to 5.7.3
+- Bump @babel/eslint-parser from 7.25.9 to 7.26.5
+- Bump eslint from 9.17.0 to 9.18.0
+
 ### 1.3.3 - Monday 6th January, 2025
 
 - 1.3.2
