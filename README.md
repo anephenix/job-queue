@@ -1,7 +1,6 @@
 # Job Queue
 
-[![npm version](https://badge.fury.io/js/%40anephenix%2Fjob-queue.svg)](https://badge.fury.io/js/%40anephenix%2Fjob-queue)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/8549f1da9906b66d02ea/test_coverage)](https://codeclimate.com/github/anephenix/job-queue/test_coverage) [![Node.js CI](https://github.com/anephenix/job-queue/actions/workflows/node.js.yml/badge.svg)](https://github.com/anephenix/job-queue/actions/workflows/node.js.yml) [![Maintainability](https://api.codeclimate.com/v1/badges/8549f1da9906b66d02ea/maintainability)](https://codeclimate.com/github/anephenix/job-queue/maintainability)[![Socket Badge](https://socket.dev/api/badge/npm/package/@anephenix/job-queue)](https://socket.dev/npm/package/@anephenix/job-queue)
+[![npm version](https://badge.fury.io/js/%40anephenix%2Fjob-queue.svg)](https://badge.fury.io/js/%40anephenix%2Fjob-queue) [![Node.js CI](https://github.com/anephenix/job-queue/actions/workflows/node.js.yml/badge.svg)](https://github.com/anephenix/job-queue/actions/workflows/node.js.yml) [![Test Coverage](https://api.codeclimate.com/v1/badges/8549f1da9906b66d02ea/test_coverage)](https://codeclimate.com/github/anephenix/job-queue/test_coverage) [![Maintainability](https://api.codeclimate.com/v1/badges/8549f1da9906b66d02ea/maintainability)](https://codeclimate.com/github/anephenix/job-queue/maintainability) [![Socket Badge](https://socket.dev/api/badge/npm/package/@anephenix/job-queue)](https://socket.dev/npm/package/@anephenix/job-queue)
 
 A Node.js Job Queue library using Redis.
 
