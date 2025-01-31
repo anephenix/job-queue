@@ -1,5 +1,16 @@
 # CHANGELOG
 
+### 1.3.7 - Friday 31st January, 2025
+
+- Updated dependencies
+- Merge pull request #71 from anephenix/dependabot/npm_and_yarn/eslint-9.19.0
+- Merge pull request #70 from anephenix/dependabot/npm_and_yarn/eslint/js-9.19.0
+- Merge pull request #69 from anephenix/dependabot/npm_and_yarn/mocha-11.1.0
+- Bump eslint from 9.18.0 to 9.19.0
+- Bump @eslint/js from 9.18.0 to 9.19.0
+- Bump mocha from 11.0.1 to 11.1.0
+- Update Badges
+
 ### 1.3.6 - Monday 13th January, 2025
 
 - More tweaks to the workflow files
