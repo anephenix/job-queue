@@ -1,5 +1,9 @@
 # CHANGELOG
 
+### 1.3.8 - Tuesday 4th February, 2025
+
+- Added size script
+
 ### 1.3.7 - Friday 31st January, 2025
 
 - Updated dependencies
