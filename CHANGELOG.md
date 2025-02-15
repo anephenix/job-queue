@@ -1,5 +1,12 @@
 # CHANGELOG
 
+### 1.3.9 - Saturday 15th February, 2025
+
+- Merge pull request #73 from anephenix/dependabot/npm_and_yarn/babel/eslint-parser-7.26.8
+- Merge pull request #72 from anephenix/dependabot/npm_and_yarn/eslint-9.20.0
+- Bump @babel/eslint-parser from 7.26.5 to 7.26.8
+- Bump eslint from 9.19.0 to 9.20.0
+
 ### 1.3.8 - Tuesday 4th February, 2025
 
 - Added size script
