@@ -1,5 +1,21 @@
 # CHANGELOG
 
+### 1.3.10 - Monday 24th February, 2025
+
+- Merge pull request #78 from anephenix/dependabot/npm_and_yarn/eslint/eslintrc-3.3.0
+- Merge pull request #79 from anephenix/dependabot/npm_and_yarn/globals-16.0.0
+- Merge pull request #81 from anephenix/dependabot/npm_and_yarn/size-limit-11.2.0
+- Merge pull request #77 from anephenix/dependabot/npm_and_yarn/eslint-9.21.0
+- Bump size-limit from 11.1.6 to 11.2.0
+- Bump globals from 15.15.0 to 16.0.0
+- Bump @eslint/eslintrc from 3.2.0 to 3.3.0
+- Bump eslint from 9.20.1 to 9.21.0
+- Merge pull request #76 from anephenix/dependabot/npm_and_yarn/globals-15.15.0
+- Merge pull request #75 from anephenix/dependabot/npm_and_yarn/eslint-9.20.1
+- Bump globals from 15.14.0 to 15.15.0
+- Bump eslint from 9.20.0 to 9.20.1
+- Fixed size script check for files
+
 ### 1.3.9 - Saturday 15th February, 2025
 
 - Merge pull request #73 from anephenix/dependabot/npm_and_yarn/babel/eslint-parser-7.26.8
