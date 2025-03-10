@@ -1,5 +1,15 @@
 # CHANGELOG
 
+### 1.3.11 - Monday 10th March, 2025
+
+- Updated dependencies
+- Merge pull request #84 from anephenix/dependabot/npm_and_yarn/eslint/js-9.22.0
+- Merge pull request #83 from anephenix/dependabot/npm_and_yarn/eslint-9.22.0
+- Bump @eslint/js from 9.21.0 to 9.22.0
+- Bump eslint from 9.21.0 to 9.22.0
+- Merge pull request #82 from anephenix/dependabot/npm_and_yarn/typescript-5.8.2
+- Bump typescript from 5.7.3 to 5.8.2
+
 ### 1.3.10 - Monday 24th February, 2025
 
 - Merge pull request #78 from anephenix/dependabot/npm_and_yarn/eslint/eslintrc-3.3.0
