@@ -1,5 +1,34 @@
 # CHANGELOG
 
+### 1.3.13 - Thursday 22nd May, 2025
+
+- Added missing build step to publish workflow
+- Merge pull request #104 from anephenix/dependabot/npm_and_yarn/mocha-11.3.0
+- Merge pull request #103 from anephenix/dependabot/npm_and_yarn/eslint/js-9.27.0
+- Merge pull request #102 from anephenix/dependabot/npm_and_yarn/eslint-9.27.0
+- Bump mocha from 11.2.2 to 11.3.0
+- Bump @eslint/js from 9.26.0 to 9.27.0
+- Bump eslint from 9.26.0 to 9.27.0
+- Merge pull request #101 from anephenix/dependabot/npm_and_yarn/redis-5.0.1
+- Merge pull request #100 from anephenix/dependabot/npm_and_yarn/globals-16.1.0
+- Bump redis from 5.0.0 to 5.0.1
+- Bump globals from 16.0.0 to 16.1.0
+- Merge pull request #99 from anephenix/dependabot/npm_and_yarn/eslint/js-9.26.0
+- Merge pull request #97 from anephenix/dependabot/npm_and_yarn/babel/eslint-parser-7.27.1
+- Merge pull request #95 from anephenix/dependabot/npm_and_yarn/eslint-9.26.0
+- Bump @babel/eslint-parser from 7.27.0 to 7.27.1
+- Bump eslint from 9.25.1 to 9.26.0
+- Merge pull request #98 from anephenix/dependabot/npm_and_yarn/mocha-11.2.2
+- Merge pull request #96 from anephenix/dependabot/npm_and_yarn/redis-5.0.0
+- Bump @eslint/js from 9.25.1 to 9.26.0
+- Bump mocha from 11.1.0 to 11.2.2
+- Bump redis from 4.7.0 to 5.0.0
+- Merge pull request #94 from anephenix/dependabot/npm_and_yarn/eslint-9.25.0
+- Bump eslint from 9.24.0 to 9.25.0
+- Merge pull request #93 from anephenix/dependabot/npm_and_yarn/eslint/js-9.25.0
+- Bump @eslint/js from 9.24.0 to 9.25.0
+- Upgrade GitHub action to use v4 of setup-nodejs
+
 ### 1.3.12 - Tuesday 8th April, 2025
 
 - Updated dependencies
