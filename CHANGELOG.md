@@ -1,5 +1,17 @@
 # CHANGELOG
 
+### 1.3.14 - Monday 26th May, 2025
+
+- Ignore the dist folder output
+- Merge pull request #108 from anephenix/dependabot/npm_and_yarn/globals-16.2.0
+- Merge pull request #107 from anephenix/dependabot/npm_and_yarn/size-limit-preset-node-lib-0.4.0
+- Merge pull request #106 from anephenix/dependabot/npm_and_yarn/mocha-11.5.0
+- Merge pull request #105 from anephenix/dependabot/npm_and_yarn/redis-5.1.0
+- Bump globals from 16.1.0 to 16.2.0
+- Bump size-limit-preset-node-lib from 0.3.0 to 0.4.0
+- Bump mocha from 11.3.0 to 11.5.0
+- Bump redis from 5.0.1 to 5.1.0
+
 ### 1.3.13 - Thursday 22nd May, 2025
 
 - Added missing build step to publish workflow
