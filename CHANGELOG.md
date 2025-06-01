@@ -1,5 +1,9 @@
 # CHANGELOG
 
+### 1.3.15 - Monday 2nd June, 2025
+
+- Applied some code changes to resolve typescript issues
+
 ### 1.3.14 - Monday 26th May, 2025
 
 - Ignore the dist folder output
