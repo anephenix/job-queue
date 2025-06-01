@@ -1,8 +1,8 @@
-import { RedisClientType } from 'redis';
+import type { RedisClientType } from 'redis';
 
 export interface Job {
 	name: string;
-	[key: string]: any;
+	[key: string]: unknown;
 }
 
 export interface Hook {

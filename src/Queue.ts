@@ -1,5 +1,5 @@
-import { Job, Hook, Hooks, QueueOptions } from './types';
-import { RedisClientType } from 'redis';
+import type { Job, Hook, Hooks, QueueOptions } from './types';
+import type { RedisClientType } from 'redis';
 
 class Queue {
 	redis: RedisClientType;
@@ -49,7 +49,7 @@ class Queue {
 		job?: Job | undefined
 	): Promise<void> {
 		if (typeof this.hooks[action][stage] === 'function') {
-			return await this.hooks[action][stage]!(job);
+			return await this.hooks[action][stage]?.(job);
 		}
 	}
 
@@ -62,7 +62,7 @@ class Queue {
 
 	async inspect(
 		keyType: keyof Queue['subQueueKeys'] = 'available'
-	): Promise<any | null> {
+	): Promise<Job | null> {
 		const job = await this.redis.lIndex(this.subQueueKeys[keyType], -1);
 		if (!job) return null;
 		return JSON.parse(job);
@@ -87,7 +87,7 @@ class Queue {
 		};
 	}
 
-	async take(): Promise<any | null> {
+	async take(): Promise<Job | null> {
 		await this.callHook('take', 'pre');
 		const job = await this.redis.lPop(this.subQueueKeys.available);
 		if (!job) {
@@ -141,4 +141,4 @@ class Queue {
 	}
 }
 
-export default Queue;
+export { Queue };

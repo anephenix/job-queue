@@ -1,10 +1,10 @@
 // Dependencies
-import assert from 'assert';
-import Queue from '../../src/Queue';
-import { createClient, RedisClientType } from 'redis';
+import assert from 'node:assert';
+import { Queue } from '../../src/Queue';
+import { createClient, type RedisClientType } from 'redis';
 import { getClient } from '../redis.test';
 import { before } from 'mocha';
-import { Job } from '../../src/types';
+import type { Job } from '../../src/types';
 import { delayUntil } from '../helpers/index.test';
 
 const prepareJob = async (
@@ -15,7 +15,16 @@ const prepareJob = async (
 	const anotherJob: Job = { name: 'Another example job' };
 	await queue.add(anotherJob);
 	await queue.take();
-	await (queue as any)[firstAction](anotherJob);
+	// const action = queue[firstAction];
+	const action = queue[firstAction] as (
+		this: Queue,
+		job: Job
+	) => Promise<void>;
+	if (typeof action === 'function') {
+		await action.call(queue, anotherJob);
+	} else {
+		throw new Error(`queue[${String(firstAction)}] is not a function`);
+	}
 	const redis = getClient();
 
 	const processingRedisJob = await redis.lIndex(
@@ -36,7 +45,7 @@ const prepareJob = async (
 describe('Queue', () => {
 	let queue: Queue;
 	let job: Job;
-	let redis: RedisClientType = getClient();
+	const redis: RedisClientType = getClient();
 
 	before(async () => {
 		const queueKey = 'example-queue';
@@ -50,10 +59,10 @@ describe('Queue', () => {
 		});
 		it('should have a set of subQueueKeys for each list', () => {
 			assert.deepEqual(queue.subQueueKeys, {
-				available: `example-queue-available`,
-				processing: `example-queue-processing`,
-				completed: `example-queue-completed`,
-				failed: `example-queue-failed`,
+				available: 'example-queue-available',
+				processing: 'example-queue-processing',
+				completed: 'example-queue-completed',
+				failed: 'example-queue-failed',
 			});
 		});
 	});

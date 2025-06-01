@@ -1,7 +1,7 @@
-import assert from 'assert';
-import Queue from '../../src/Queue';
-import Worker from '../../src/Worker';
-import { RedisClientType } from 'redis';
+import assert from 'node:assert';
+import { Queue } from '../../src/Queue';
+import { Worker } from '../../src/Worker';
+import type { RedisClientType } from 'redis';
 import { getClient } from '../redis.test';
 import { before } from 'mocha';
 import {
@@ -9,11 +9,12 @@ import {
 	checkJobsMatch,
 	incrementCallCountOrReturnJob,
 } from '../helpers/index.test';
+import type { Job } from '../../src/types';
 
 describe('Worker', () => {
 	let worker: Worker;
 	let queue: Queue;
-	let redis: RedisClientType = getClient();
+	const redis: RedisClientType = getClient();
 
 	before(async () => {
 		const queueKey = 'example-queue';
@@ -33,7 +34,7 @@ describe('Worker', () => {
 
 	describe('#start', () => {
 		it('should get a job', async () => {
-			let called: boolean = false;
+			let called = false;
 			const anotherWorker = new Worker(queue);
 			anotherWorker.getJob = () => {
 				called = true;
@@ -82,7 +83,7 @@ describe('Worker', () => {
 
 	describe('#getJob', () => {
 		describe('if status is available', () => {
-			it('should poll the queue for a job', async function () {
+			it('should poll the queue for a job', async () => {
 				let callCount = 0;
 				const anotherQueue = new Queue({
 					queueKey: 'another-example',
@@ -100,7 +101,7 @@ describe('Worker', () => {
 				assert.equal(callCount, numberOfTries);
 				await anotherWorker.stop();
 			});
-			it('should stop polling that queue once it has a job', async function () {
+			it('should stop polling that queue once it has a job', async () => {
 				let callCount = 0;
 				let processJobCalled = false;
 				const job = { name: 'Example job' };
@@ -112,9 +113,8 @@ describe('Worker', () => {
 					if (callCount === 0) {
 						callCount++;
 						return null;
-					} else {
-						return job;
 					}
+					return job;
 				};
 				const anotherWorker = new Worker(anotherQueue);
 				anotherWorker.pollTimeout = 5;
@@ -227,9 +227,9 @@ describe('Worker', () => {
 		});
 
 		describe('#completeJob', () => {
-			let anotherQueue;
-			let job;
-			let anotherWorker;
+			let anotherQueue: Queue;
+			let job: Job;
+			let anotherWorker: Worker;
 			let callCount = 0;
 
 			before(async () => {
@@ -265,9 +265,9 @@ describe('Worker', () => {
 		});
 
 		describe('#failJob', () => {
-			let anotherQueue;
-			let job;
-			let anotherWorker;
+			let anotherQueue: Queue;
+			let job: Job;
+			let anotherWorker: Worker;
 			let callCount = 0;
 
 			before(async () => {
@@ -307,9 +307,9 @@ describe('Worker', () => {
 		});
 
 		describe('#releaseJob', () => {
-			let anotherQueue;
-			let job;
-			let anotherWorker;
+			let anotherQueue: Queue;
+			let job: Job;
+			let anotherWorker: Worker;
 			let callCount = 0;
 
 			before(async () => {

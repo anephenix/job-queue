@@ -1,4 +1,4 @@
-import { Job } from './types';
+import type { Job } from './types';
 
 interface Queue {
 	take(): Promise<Job | null>;
@@ -80,4 +80,4 @@ class Worker {
 	}
 }
 
-export default Worker;
+export { Worker };
