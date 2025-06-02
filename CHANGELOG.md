@@ -1,5 +1,15 @@
 # CHANGELOG
 
+### 1.3.17 - Monday 2nd June, 2025
+
+- Merge branch 'master' of github.com:anephenix/job-queue
+- Merge pull request #111 from anephenix/dependabot/npm_and_yarn/eslint/js-9.28.0
+- Merge pull request #110 from anephenix/dependabot/npm_and_yarn/eslint-9.28.0
+- Merge pull request #109 from anephenix/dependabot/npm_and_yarn/redis-5.1.1
+- Bump @eslint/js from 9.27.0 to 9.28.0
+- Bump eslint from 9.27.0 to 9.28.0
+- Bump redis from 5.1.0 to 5.1.1
+
 ### 1.3.16 - Monday 2nd June, 2025
 
 - Tweaks for the typescript config to help load the typescript definitions
