@@ -1,5 +1,9 @@
 # CHANGELOG
 
+### 1.3.16 - Monday 2nd June, 2025
+
+- Tweaks for the typescript config to help load the typescript definitions
+
 ### 1.3.15 - Monday 2nd June, 2025
 
 - Applied some code changes to resolve typescript issues
