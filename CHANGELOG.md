@@ -1,5 +1,9 @@
 # CHANGELOG
 
+### 1.3.19 - Sunday 8th June, 2025
+
+- Amended the package.json to include the dist files for the published npm package
+
 ### 1.3.18 - Sunday 8th June, 2025
 
 - Replaced using ts-node with --experimental-strip-types flag
