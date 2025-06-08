@@ -1,5 +1,14 @@
 # CHANGELOG
 
+### 1.3.18 - Sunday 8th June, 2025
+
+- Replaced using ts-node with --experimental-strip-types flag
+- Modified the tsconfig to fix an issue loading the module in vite
+- Adjusted permissions for this GitHub workflow
+- Slight amendment to the publish GitHub workflow
+- Adjusted permissions for GitHub workflows
+- Update docs
+
 ### 1.3.17 - Monday 2nd June, 2025
 
 - Applied dependency updates
