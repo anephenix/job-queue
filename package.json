@@ -1,6 +1,6 @@
 {
 	"name": "@anephenix/job-queue",
-	"version": "1.3.19",
+	"version": "1.3.20",
 	"description": "Job Queue",
 	"type": "module",
 	"exports": {
