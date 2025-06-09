@@ -1,5 +1,14 @@
 # CHANGELOG
 
+### 1.3.20 - Monday 9th June, 2025
+
+- Merge branch 'master' of github.com:anephenix/job-queue
+- Small fixes for importing types and providing the correct file path to the commonjs version of the module
+- Merge pull request #113 from anephenix/dependabot/npm_and_yarn/babel/eslint-parser-7.27.5
+- Merge pull request #112 from anephenix/dependabot/npm_and_yarn/redis-5.5.6
+- Bump @babel/eslint-parser from 7.27.1 to 7.27.5
+- Bump redis from 5.1.1 to 5.5.6
+
 ### 1.3.19 - Sunday 8th June, 2025
 
 - Amended the package.json to include the dist files for the published npm package
