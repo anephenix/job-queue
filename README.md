@@ -38,7 +38,7 @@ Once you have that, you can create a queue like this:
 ```javascript
 const { Queue } = require('@anephenix/job-queue');
 
-const emailQueue = new Queue({ queueKey: 'email', redis });
+const emailQueue = new Queue({ queueKey: 'email', redis, hooks: {} });
 ```
 
 #### Adding jobs

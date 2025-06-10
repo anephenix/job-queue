@@ -1,6 +1,6 @@
 // Dependencies
-import { Queue } from './Queue';
-import { Worker } from './Worker';
-export type { Job, Hook, Hooks, QueueOptions } from './types';
+import { Queue } from './Queue.js';
+import { Worker } from './Worker.js';
+export type { Job, Hook, Hooks, QueueOptions } from './types.js';
 
 export { Queue, Worker };

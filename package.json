@@ -5,8 +5,8 @@
 	"type": "module",
 	"exports": {
 		".": {
-			"import": "./dist/esm/index.js",
-			"require": "./dist/cjs/index.js"
+			"import": "./dist/index.js",
+			"require": "./dist/index.js"
 		}
 	},
 	"types": "./dist/index.d.ts",
@@ -15,13 +15,16 @@
 		"README.md"
 	],
 	"scripts": {
-		"build": "tsc --project tsconfig.json && tsc --project tsconfig.esm.json && tsc --project tsconfig.cjs.json",
+		"build": "tsc --project tsconfig.json",
 		"cover": "NODE_ENV=test npx nyc --reporter=lcov npm t",
 		"lint": "npx eslint .",
 		"prepare-patch-release": "npm run build && npm run size && npm run update-changelog && git add CHANGELOG.md && git commit -m \"Updated changelog\" && npm version patch",
 		"publish-patch-release": "npm run prepare-patch-release && git push origin master && git push --tags",
 		"size": "size-limit",
 		"test": "NODE_ENV=test node --import tsx --import ./test/hooks.ts node_modules/mocha/bin/mocha.js --extensions ts,tsx test/**/* --exit",
+		"test:build:commonjs": "node e2e/test-commonjs.cjs",
+		"test:build:esm": "node e2e/test-esm.js",
+		"test:e2e": "npm run build && npm run test:build:commonjs && npm run test:build:esm",
 		"update-changelog": "node --experimental-strip-types scripts/update-changelog.ts",
 		"watch": "tsc --project tsconfig.json --watch"
 	},
@@ -58,11 +61,11 @@
 	},
 	"size-limit": [
 		{
-			"path": "dist/esm/*.js",
+			"path": "dist/*.ts",
 			"limit": "10 KB"
 		},
 		{
-			"path": "dist/cjs/*.js",
+			"path": "dist/*.js",
 			"limit": "10 KB"
 		}
 	]

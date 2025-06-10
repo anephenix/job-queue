@@ -1,4 +1,4 @@
-import type { Job, Hook, Hooks, QueueOptions } from './types';
+import type { Job, Hook, Hooks, QueueOptions } from './types.ts';
 import type { RedisClientType } from 'redis';
 
 class Queue {

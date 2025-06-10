@@ -1,4 +1,4 @@
-import type { Job } from './types';
+import type { Job } from './types.ts';
 
 interface Queue {
 	take(): Promise<Job | null>;
