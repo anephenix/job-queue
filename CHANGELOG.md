@@ -1,5 +1,9 @@
 # CHANGELOG
 
+### 1.3.21 - Tuesday 10th June, 2025
+
+- Fixed the build issue so that it supports ESM/CommonJS fine
+
 ### 1.3.20 - Monday 9th June, 2025
 
 - Merge branch 'master' of github.com:anephenix/job-queue
