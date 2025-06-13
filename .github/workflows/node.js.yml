@@ -12,9 +12,7 @@ jobs:
     build:
         runs-on: ubuntu-latest
         env:
-            APP_ENV: test
             NODE_ENV: test
-            CC_TEST_REPORTER_ID: d83276de03b0016003d9365783681c2c4398496b072fe2b1467d3a83d40aae05
 
         services:
             redis:
@@ -42,19 +40,5 @@ jobs:
 
             - run: npm i
             - run: npm run lint
-
-            - name: Download Code Climate Test Reporter
-              run: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-
-            - name: Make Test Reporter Executable
-              run: chmod +x ./cc-test-reporter
-
-            - name: Run Code Climate Test Reporter (Before Build)
-              run: ./cc-test-reporter before-build
-
             - name: Run Tests with Coverage
               run: npm run cover
-
-            - name: Run Code Climate Test Reporter (After Build)
-              run: ./cc-test-reporter after-build
-              if: github.event_name != 'pull_request'
