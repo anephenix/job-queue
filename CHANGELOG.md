@@ -1,5 +1,9 @@
 # CHANGELOG
 
+### 1.3.23 - Wednesday 8th October, 2025
+
+- Added publint to verify the package.json
+
 ### 1.3.22 - Monday 6th October, 2025
 
 - Updated the package-lock.json file
