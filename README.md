@@ -28,7 +28,7 @@ You will need a create a Redis client (v4 of Redis)
 
 ```javascript
 // Dependencies
-const redisLib = require('redis');
+import * as redisLib from 'redis';
 const redisConfig = {};
 const redis = redisLib.createClient(redisConfig);
 ```
@@ -36,7 +36,7 @@ const redis = redisLib.createClient(redisConfig);
 Once you have that, you can create a queue like this:
 
 ```javascript
-const { Queue } = require('@anephenix/job-queue');
+import { Queue } from '@anephenix/job-queue';
 
 const emailQueue = new Queue({ queueKey: 'email', redis, hooks: {} });
 ```
@@ -64,8 +64,8 @@ emailQueue.add(job);
 Workers can be setup like this:
 
 ```javascript
-const { Worker } = require('@anephenix/job-queue');
-const sendEmail = require('./sendEmail');
+import { Worker } from '@anephenix/job-queue';
+import sendEmail from './sendEmail.js';
 
 class EmailWorker extends Worker {
 	async processJob(job) {
