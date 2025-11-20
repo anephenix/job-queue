@@ -32,11 +32,8 @@ class Queue {
 	}
 
 	private async connect(): Promise<void> {
-		try {
-			await this.redis.ping();
-		} catch {
-			await this.redis.connect();
-		}
+		if (this.redis.isOpen) return;
+		await this.redis.connect();
 	}
 
 	async disconnect(): Promise<string> {
