@@ -1,5 +1,50 @@
 # CHANGELOG
 
+### 1.3.24 - Thursday 20th November, 2025
+
+- Resolved an issue where a Queue instance would attempt to call redis.connect because the redis.ping command threw an error - turns out the modern api call is to call redis.isOpen
+- Merge pull request #187 from anephenix/dependabot/npm_and_yarn/npm_and_yarn-bdc76aff73
+- Bump glob in the npm_and_yarn group across 1 directory
+- Merge pull request #186 from anephenix/dependabot/npm_and_yarn/npm_and_yarn-4265e88a4c
+- Bump js-yaml in the npm_and_yarn group across 1 directory
+- Merge pull request #185 from anephenix/dependabot/npm_and_yarn/eslint-9.39.1
+- Merge pull request #182 from anephenix/dependabot/npm_and_yarn/eslint/js-9.39.1
+- Merge pull request #183 from anephenix/dependabot/npm_and_yarn/mocha-11.7.5
+- Merge pull request #184 from anephenix/dependabot/npm_and_yarn/types/node-24.10.0
+- Bump eslint from 9.39.0 to 9.39.1
+- Bump @types/node from 24.9.2 to 24.10.0
+- Bump mocha from 11.7.4 to 11.7.5
+- Bump @eslint/js from 9.39.0 to 9.39.1
+- Updated dependencies
+- Merge pull request #179 from anephenix/dependabot/npm_and_yarn/eslint/js-9.39.0
+- Merge pull request #178 from anephenix/dependabot/npm_and_yarn/eslint-9.39.0
+- Merge pull request #181 from anephenix/dependabot/npm_and_yarn/types/node-24.9.2
+- Merge pull request #180 from anephenix/dependabot/npm_and_yarn/globals-16.5.0
+- Bump @types/node from 24.9.1 to 24.9.2
+- Bump globals from 16.4.0 to 16.5.0
+- Bump @eslint/js from 9.38.0 to 9.39.0
+- Bump eslint from 9.38.0 to 9.39.0
+- Merge pull request #177 from anephenix/dependabot/npm_and_yarn/types/node-24.9.1
+- Merge pull request #175 from anephenix/dependabot/npm_and_yarn/babel/eslint-parser-7.28.5
+- Merge pull request #176 from anephenix/dependabot/npm_and_yarn/publint-0.3.15
+- Merge pull request #174 from anephenix/dependabot/npm_and_yarn/redis-5.9.0
+- Bump @types/node from 24.8.1 to 24.9.1
+- Bump publint from 0.3.14 to 0.3.15
+- Bump @babel/eslint-parser from 7.28.4 to 7.28.5
+- Bump redis from 5.8.3 to 5.9.0
+- Updated dependencies
+- Updated the docs to use ESModules and TypeScript syntax
+- Merge pull request #171 from anephenix/dependabot/npm_and_yarn/eslint/js-9.38.0
+- Merge pull request #170 from anephenix/dependabot/npm_and_yarn/eslint-9.38.0
+- Merge pull request #169 from anephenix/dependabot/npm_and_yarn/types/node-24.8.1
+- Bump @eslint/js from 9.37.0 to 9.38.0
+- Bump eslint from 9.37.0 to 9.38.0
+- Bump @types/node from 24.7.2 to 24.8.1
+- Merge pull request #168 from anephenix/dependabot/npm_and_yarn/mocha-11.7.4
+- Merge pull request #167 from anephenix/dependabot/npm_and_yarn/types/node-24.7.2
+- Bump mocha from 11.7.2 to 11.7.4
+- Bump @types/node from 24.6.2 to 24.7.2
+
 ### 1.3.23 - Wednesday 8th October, 2025
 
 - Added publint to verify the package.json
