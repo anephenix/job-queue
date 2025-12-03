@@ -1,5 +1,20 @@
 # CHANGELOG
 
+### 1.3.25 - Wednesday 3rd December, 2025
+
+- Updated license
+- Updated dependencies
+- Merge branch 'master' of github.com:anephenix/job-queue
+- Updated dependencies
+- Merge pull request #191 from anephenix/dependabot/npm_and_yarn/tsx-4.21.0
+- Merge pull request #192 from anephenix/dependabot/npm_and_yarn/eslint/eslintrc-3.3.3
+- Bump @eslint/eslintrc from 3.3.1 to 3.3.3
+- Bump tsx from 4.20.6 to 4.21.0
+- Merge pull request #189 from anephenix/dependabot/npm_and_yarn/redis-5.10.0
+- Merge pull request #188 from anephenix/dependabot/npm_and_yarn/types/node-24.10.1
+- Bump redis from 5.9.0 to 5.10.0
+- Bump @types/node from 24.10.0 to 24.10.1
+
 ### 1.3.24 - Thursday 20th November, 2025
 
 - Resolved an issue where a Queue instance would attempt to call redis.connect because the redis.ping command threw an error - turns out the modern api call is to call redis.isOpen
