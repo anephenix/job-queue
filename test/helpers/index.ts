@@ -1,4 +1,4 @@
-import { getClient } from '../redis.test';
+import { getClient } from '../redis';
 import assert from 'assert';
 
 // Types and Interfaces

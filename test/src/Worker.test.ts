@@ -2,13 +2,13 @@ import assert from 'node:assert';
 import { Queue } from '../../src/Queue';
 import { Worker } from '../../src/Worker';
 import type { RedisClientType } from 'redis';
-import { getClient } from '../redis.test';
-import { before } from 'mocha';
+import { getClient } from '../redis';
+import { describe, beforeAll, it } from 'vitest';
 import {
 	delay,
 	checkJobsMatch,
 	incrementCallCountOrReturnJob,
-} from '../helpers/index.test';
+} from '../helpers';
 import type { Job } from '../../src/types';
 
 describe('Worker', () => {
@@ -16,7 +16,7 @@ describe('Worker', () => {
 	let queue: Queue;
 	const redis: RedisClientType = getClient();
 
-	before(async () => {
+	beforeAll(async () => {
 		const queueKey = 'example-queue';
 		queue = new Queue({ queueKey, redis });
 		worker = new Worker(queue);
@@ -232,7 +232,7 @@ describe('Worker', () => {
 			let anotherWorker: Worker;
 			let callCount = 0;
 
-			before(async () => {
+			beforeAll(async () => {
 				anotherQueue = new Queue({
 					queueKey: 'another-example',
 					redis,
@@ -270,7 +270,7 @@ describe('Worker', () => {
 			let anotherWorker: Worker;
 			let callCount = 0;
 
-			before(async () => {
+			beforeAll(async () => {
 				anotherQueue = new Queue({
 					queueKey: 'another-example',
 					redis,
@@ -312,7 +312,7 @@ describe('Worker', () => {
 			let anotherWorker: Worker;
 			let callCount = 0;
 
-			before(async () => {
+			beforeAll(async () => {
 				anotherQueue = new Queue({
 					queueKey: 'another-example',
 					redis,
