@@ -2,10 +2,11 @@
 import assert from 'node:assert';
 import { Queue } from '../../src/Queue';
 import { createClient, type RedisClientType } from 'redis';
-import { getClient } from '../redis.test';
-import { before } from 'mocha';
+import { getClient } from '../redis';
+import { describe, beforeAll, it } from 'vitest';
+
 import type { Job } from '../../src/types';
-import { delayUntil } from '../helpers/index.test';
+import { delayUntil } from '../helpers';
 
 const prepareJob = async (
 	queue: Queue,
@@ -47,7 +48,7 @@ describe('Queue', () => {
 	let job: Job;
 	const redis: RedisClientType = getClient();
 
-	before(async () => {
+	beforeAll(async () => {
 		const queueKey = 'example-queue';
 		queue = new Queue({ queueKey, redis });
 		job = { name: 'example-job' };
@@ -215,7 +216,7 @@ describe('Queue', () => {
 			redis,
 		});
 
-		before(async () => {
+		beforeAll(async () => {
 			await queue.flushAll();
 			const initialCount = await queue.count('available');
 			assert.equal(initialCount, 0);

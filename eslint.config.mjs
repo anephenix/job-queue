@@ -22,7 +22,7 @@ export default [
 		languageOptions: {
 			globals: {
 				...globals.node,
-				...globals.mocha,
+				...globals.vitest
 			},
 
 			parser: babelParser,
