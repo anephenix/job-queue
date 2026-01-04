@@ -1,5 +1,22 @@
 # CHANGELOG
 
+### 1.3.26 - Sunday 4th January, 2026
+
+- Tweaks for new publish workflow
+- Merge pull request #199 from anephenix/198-convert-from-mocha-to-vitest
+- Replaced mocha with vitest
+- Updated dependencies
+- Merge pull request #197 from anephenix/dependabot/npm_and_yarn/types/node-25.0.3
+- Bump @types/node from 25.0.2 to 25.0.3
+- Merge pull request #193 from anephenix/dependabot/npm_and_yarn/eslint-9.39.2
+- Merge pull request #195 from anephenix/dependabot/npm_and_yarn/eslint/js-9.39.2
+- Bump eslint from 9.39.1 to 9.39.2
+- Bump @eslint/js from 9.39.1 to 9.39.2
+- Merge pull request #194 from anephenix/dependabot/npm_and_yarn/publint-0.3.16
+- Merge pull request #196 from anephenix/dependabot/npm_and_yarn/types/node-25.0.2
+- Bump @types/node from 24.10.1 to 25.0.2
+- Bump publint from 0.3.15 to 0.3.16
+
 ### 1.3.25 - Wednesday 3rd December, 2025
 
 - Updated license
