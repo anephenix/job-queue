@@ -14,6 +14,14 @@
 		"dist",
 		"README.md"
 	],
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/anephenix/job-queue.git"
+	},
+	"homepage": "https://github.com/anephenix/job-queue",
+	"bugs": {
+		"url": "https://github.com/anephenix/job-queue/issues"
+	},
 	"scripts": {
 		"build": "tsc --project tsconfig.json",
 		"cover": "npm t",
