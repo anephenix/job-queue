@@ -1,4 +1,4 @@
-import type { RedisClientType } from 'redis';
+import type { RedisClientType } from "redis";
 
 export interface Job {
 	name: string;

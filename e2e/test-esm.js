@@ -2,9 +2,9 @@
     We use this as a check to ensure that the ESM build loads correctly.
 */
 
+import { createClient } from "redis";
 // Dependencies
-import { Queue, Worker } from '../dist/index.js';
-import { createClient } from 'redis';
+import { Queue, Worker } from "../dist/index.js";
 
 // Configuration
 const redisConfig = {};
@@ -16,7 +16,7 @@ try {
 
 	// Setup a Queue instance
 	const queue = new Queue({
-		queueKey: 'test-queue',
+		queueKey: "test-queue",
 		redis,
 		hooks,
 	});
@@ -26,11 +26,11 @@ try {
 		const worker = new Worker(queue);
 
 		// If nothing breaks by now, then the ESM build is working correctly.
-		console.log('ESM test passed successfully!');
+		console.log("ESM test passed successfully!");
 		await worker.stop();
 		process.exit(0);
 	})();
 } catch (error) {
-	console.error('Error during ESM build check:', error);
+	console.error("Error during ESM build check:", error);
 	process.exit(1);
 }

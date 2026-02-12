@@ -1,4 +1,4 @@
-import type { Job } from './types.ts';
+import type { Job } from "./types.ts";
 
 interface Queue {
 	take(): Promise<Job | null>;
@@ -9,13 +9,13 @@ interface Queue {
 
 class Worker {
 	queue: Queue;
-	status: 'available' | 'processing' | 'stopped';
+	status: "available" | "processing" | "stopped";
 	pollTimeout: number;
 	currentJob: Job | null;
 
 	constructor(queue: Queue) {
 		this.queue = queue;
-		this.status = 'available';
+		this.status = "available";
 		this.pollTimeout = 1000;
 		this.currentJob = null;
 	}
@@ -25,7 +25,7 @@ class Worker {
 	}
 
 	async stop(): Promise<void> {
-		this.status = 'stopped';
+		this.status = "stopped";
 		if (this.currentJob) {
 			const skipSettingStatus = true;
 			await this.releaseJob(this.currentJob, skipSettingStatus);
@@ -33,7 +33,7 @@ class Worker {
 	}
 
 	async getJob(): Promise<void> {
-		if (this.status === 'available') {
+		if (this.status === "available") {
 			const job = await this.queue.take();
 			if (job) {
 				this.currentJob = job;
@@ -47,10 +47,10 @@ class Worker {
 	}
 
 	async processJob(job: Job): Promise<void> {
-		this.status = 'processing';
+		this.status = "processing";
 		try {
 			await this.completeJob(job);
-		} catch (error) {
+		} catch (_error) {
 			// TODO - find a way to bind the error to the job, but to be fair this function gets overridden anyway I think
 			await this.failJob(job);
 		}
@@ -59,24 +59,24 @@ class Worker {
 	async concludeJob(
 		job: Job,
 		queueCommand: keyof Queue,
-		skipSettingStatus?: boolean
+		skipSettingStatus?: boolean,
 	): Promise<void> {
 		this.currentJob = null;
 		await this.queue[queueCommand](job);
-		if (!skipSettingStatus) this.status = 'available';
+		if (!skipSettingStatus) this.status = "available";
 		await this.getJob();
 	}
 
 	async completeJob(job: Job, skipSettingStatus?: boolean): Promise<void> {
-		return await this.concludeJob(job, 'complete', skipSettingStatus);
+		return await this.concludeJob(job, "complete", skipSettingStatus);
 	}
 
 	async failJob(job: Job, skipSettingStatus?: boolean): Promise<void> {
-		return await this.concludeJob(job, 'fail', skipSettingStatus);
+		return await this.concludeJob(job, "fail", skipSettingStatus);
 	}
 
 	async releaseJob(job: Job, skipSettingStatus?: boolean): Promise<void> {
-		return await this.concludeJob(job, 'release', skipSettingStatus);
+		return await this.concludeJob(job, "release", skipSettingStatus);
 	}
 }
 

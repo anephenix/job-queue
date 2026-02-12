@@ -3,8 +3,8 @@
 */
 
 // Dependencies
-const { Queue, Worker } = require('../dist/index.js');
-const redisLib = require('redis');
+const { Queue, Worker } = require("../dist/index.js");
+const redisLib = require("redis");
 
 // Configuration
 const redisConfig = {};
@@ -13,7 +13,7 @@ const hooks = {};
 
 try {
 	const queue = new Queue({
-		queueKey: 'test-queue',
+		queueKey: "test-queue",
 		redis,
 		hooks,
 	});
@@ -23,11 +23,11 @@ try {
 		const worker = new Worker(queue);
 
 		// If nothing breaks by now, then the CommonJS build is working correctly.
-		console.log('CommonJS test passed successfully!');
+		console.log("CommonJS test passed successfully!");
 		await worker.stop();
 		process.exit(0);
 	})();
 } catch (error) {
-	console.error('Error during CommonJS build check:', error);
+	console.error("Error during CommonJS build check:", error);
 	process.exit(1);
 }

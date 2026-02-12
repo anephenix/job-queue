@@ -1,5 +1,6 @@
-import { getClient } from '../redis';
-import assert from 'assert';
+import assert from "node:assert";
+import type { Job } from "../../src/types";
+import { getClient } from "../redis";
 
 // Types and Interfaces
 interface Queue {
@@ -8,7 +9,7 @@ interface Queue {
 
 interface IncrementCallCountResult {
 	newCallCount: number;
-	result: any;
+	result: Job;
 }
 
 // Helper functions
@@ -17,7 +18,7 @@ const delay = (duration: number): Promise<void> =>
 
 const delayUntil = async (
 	condition: () => Promise<boolean>,
-	timeout: number
+	timeout: number,
 ): Promise<void> => {
 	const conditionMet = await condition();
 	if (conditionMet) {
@@ -30,20 +31,20 @@ const delayUntil = async (
 
 const checkJobsMatch = async (
 	queue: Queue,
-	job: any,
-	subQueueKey: string
+	job: Job,
+	subQueueKey: string,
 ): Promise<void> => {
 	const redis = getClient();
 	const fetchedJob = await redis.lIndex(queue.subQueueKeys[subQueueKey], -1);
 	if (!fetchedJob) {
-		throw new Error('Job not found in queue');
+		throw new Error("Job not found in queue");
 	}
 	assert.deepEqual(JSON.parse(fetchedJob), job);
 };
 
 const incrementCallCountOrReturnJob = (
 	callCount: number,
-	job: any
+	job: Job,
 ): IncrementCallCountResult => {
 	if (callCount === 0) {
 		callCount++;

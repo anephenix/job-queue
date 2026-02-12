@@ -1,5 +1,5 @@
 // Dependencies
-import { createClient, RedisClientType } from 'redis';
+import { createClient, type RedisClientType } from "redis";
 
 let redisClient: RedisClientType | null = null;
 

@@ -1,39 +1,39 @@
-import assert from 'node:assert';
-import { Queue } from '../../src/Queue';
-import { Worker } from '../../src/Worker';
-import type { RedisClientType } from 'redis';
-import { getClient } from '../redis';
-import { describe, beforeAll, it } from 'vitest';
+import assert from "node:assert";
+import type { RedisClientType } from "redis";
+import { beforeAll, describe, it } from "vitest";
+import { Queue } from "../../src/Queue";
+import type { Job } from "../../src/types";
+import { Worker } from "../../src/Worker";
 import {
-	delay,
 	checkJobsMatch,
+	delay,
 	incrementCallCountOrReturnJob,
-} from '../helpers';
-import type { Job } from '../../src/types';
+} from "../helpers";
+import { getClient } from "../redis";
 
-describe('Worker', () => {
+describe("Worker", () => {
 	let worker: Worker;
 	let queue: Queue;
 	const redis: RedisClientType = getClient();
 
 	beforeAll(async () => {
-		const queueKey = 'example-queue';
+		const queueKey = "example-queue";
 		queue = new Queue({ queueKey, redis });
 		worker = new Worker(queue);
 	});
 
-	describe('on initialising an instance', () => {
-		it('should have a queue', () => {
+	describe("on initialising an instance", () => {
+		it("should have a queue", () => {
 			assert.deepEqual(worker.queue, queue);
 		});
 
-		it('should have a status of available', () => {
-			assert.deepEqual(worker.status, 'available');
+		it("should have a status of available", () => {
+			assert.deepEqual(worker.status, "available");
 		});
 	});
 
-	describe('#start', () => {
-		it('should get a job', async () => {
+	describe("#start", () => {
+		it("should get a job", async () => {
 			let called = false;
 			const anotherWorker = new Worker(queue);
 			anotherWorker.getJob = () => {
@@ -45,48 +45,48 @@ describe('Worker', () => {
 		});
 	});
 
-	describe('#stop', () => {
-		it('should set the worker status to stopped', async () => {
+	describe("#stop", () => {
+		it("should set the worker status to stopped", async () => {
 			const anotherQueue = new Queue({
-				queueKey: 'another-example',
+				queueKey: "another-example",
 				redis,
 			});
 			const anotherWorker = new Worker(anotherQueue);
 			await anotherWorker.stop();
-			assert.equal(anotherWorker.status, 'stopped');
+			assert.equal(anotherWorker.status, "stopped");
 		});
-		it('should release the job, if called when processing a job, and prevent releaseJob from setting the worker status to available afterwards', async () => {
+		it("should release the job, if called when processing a job, and prevent releaseJob from setting the worker status to available afterwards", async () => {
 			const anotherQueue = new Queue({
-				queueKey: 'another-test-example',
+				queueKey: "another-test-example",
 				redis,
 			});
-			const job = { name: 'a job I must take' };
+			const job = { name: "a job I must take" };
 			await anotherQueue.add(job);
 			const anotherWorker = new Worker(anotherQueue);
 			anotherWorker.pollTimeout = 5;
 			anotherWorker.processJob = async () => {};
 			await anotherWorker.start();
-			assert.equal(anotherWorker.status, 'available');
+			assert.equal(anotherWorker.status, "available");
 			await delay(anotherWorker.pollTimeout * 0.5);
 			await anotherWorker.stop();
-			assert.equal(anotherWorker.status, 'stopped');
+			assert.equal(anotherWorker.status, "stopped");
 			const fetchedJob = await redis.lIndex(
 				anotherQueue.subQueueKeys.available,
-				-1
+				-1,
 			);
 			if (!fetchedJob) {
-				throw new Error('Job not found in queue');
+				throw new Error("Job not found in queue");
 			}
 			assert.deepEqual(JSON.parse(fetchedJob), job);
 		});
 	});
 
-	describe('#getJob', () => {
-		describe('if status is available', () => {
-			it('should poll the queue for a job', async () => {
+	describe("#getJob", () => {
+		describe("if status is available", () => {
+			it("should poll the queue for a job", async () => {
 				let callCount = 0;
 				const anotherQueue = new Queue({
-					queueKey: 'another-example',
+					queueKey: "another-example",
 					redis,
 				});
 				anotherQueue.take = async () => {
@@ -101,12 +101,12 @@ describe('Worker', () => {
 				assert.equal(callCount, numberOfTries);
 				await anotherWorker.stop();
 			});
-			it('should stop polling that queue once it has a job', async () => {
+			it("should stop polling that queue once it has a job", async () => {
 				let callCount = 0;
 				let processJobCalled = false;
-				const job = { name: 'Example job' };
+				const job = { name: "Example job" };
 				const anotherQueue = new Queue({
-					queueKey: 'another-example',
+					queueKey: "another-example",
 					redis,
 				});
 				anotherQueue.take = async () => {
@@ -128,11 +128,11 @@ describe('Worker', () => {
 			});
 		});
 
-		describe('if status is not available', () => {
-			it('should just return without doing any polling', async () => {
+		describe("if status is not available", () => {
+			it("should just return without doing any polling", async () => {
 				let callCount = 0;
 				const anotherQueue = new Queue({
-					queueKey: 'another-example',
+					queueKey: "another-example",
 					redis,
 				});
 				anotherQueue.take = async () => {
@@ -140,34 +140,34 @@ describe('Worker', () => {
 					return null;
 				};
 				const anotherWorker = new Worker(anotherQueue);
-				anotherWorker.status = 'processing';
+				anotherWorker.status = "processing";
 				await anotherWorker.getJob();
 				assert.equal(callCount, 0);
 			});
 		});
 
-		describe('#processJob', () => {
-			it('should set the status to processing', async () => {
+		describe("#processJob", () => {
+			it("should set the status to processing", async () => {
 				const anotherQueue = new Queue({
-					queueKey: 'another-example',
+					queueKey: "another-example",
 					redis,
 				});
-				const job = { name: 'Example job' };
+				const job = { name: "Example job" };
 				await anotherQueue.add(job);
 				const anotherWorker = new Worker(anotherQueue);
 				anotherWorker.completeJob = () => {
 					return Promise.resolve();
 				};
 				await anotherWorker.start();
-				assert.equal(anotherWorker.status, 'processing');
+				assert.equal(anotherWorker.status, "processing");
 			});
 
-			it('should set the currentJob value to that of the job', async () => {
+			it("should set the currentJob value to that of the job", async () => {
 				const anotherQueue = new Queue({
-					queueKey: 'another-example-bam',
+					queueKey: "another-example-bam",
 					redis,
 				});
-				const job = { name: 'Example job' };
+				const job = { name: "Example job" };
 				await anotherQueue.add(job);
 				const anotherWorker = new Worker(anotherQueue);
 				anotherWorker.completeJob = () => {
@@ -177,56 +177,56 @@ describe('Worker', () => {
 				assert.deepEqual(anotherWorker.currentJob, job);
 			});
 
-			describe('if the job is processed fine', () => {
-				it('should complete the job', async () => {
+			describe("if the job is processed fine", () => {
+				it("should complete the job", async () => {
 					const anotherQueue = new Queue({
-						queueKey: 'another-example',
+						queueKey: "another-example",
 						redis,
 					});
-					const job = { name: 'Another example job to complete' };
+					const job = { name: "Another example job to complete" };
 					await anotherQueue.add(job);
 					const anotherWorker = new Worker(anotherQueue);
 					await anotherWorker.start();
 					await delay(2);
 					const fetchedJob = await redis.lIndex(
 						anotherQueue.subQueueKeys.completed,
-						-1
+						-1,
 					);
 					if (!fetchedJob) {
-						throw new Error('Job not found in queue');
+						throw new Error("Job not found in queue");
 					}
 					assert.deepEqual(JSON.parse(fetchedJob), job);
 				});
 			});
 
-			describe('if an error occurs during processing', () => {
-				it('should fail the job', async () => {
+			describe("if an error occurs during processing", () => {
+				it("should fail the job", async () => {
 					const anotherQueue = new Queue({
-						queueKey: 'another-example',
+						queueKey: "another-example",
 						redis,
 					});
-					const job = { name: 'A job to fail' };
+					const job = { name: "A job to fail" };
 					await anotherQueue.add(job);
 					const anotherWorker = new Worker(anotherQueue);
 					// Stub the function to fail the job
 					anotherWorker.completeJob = async () => {
-						throw new Error('Something');
+						throw new Error("Something");
 					};
 					await anotherWorker.start();
 					await delay(2);
 					const fetchedJob = await redis.lIndex(
 						anotherQueue.subQueueKeys.failed,
-						-1
+						-1,
 					);
 					if (!fetchedJob) {
-						throw new Error('Job not found in queue');
+						throw new Error("Job not found in queue");
 					}
 					assert.deepEqual(JSON.parse(fetchedJob), job);
 				});
 			});
 		});
 
-		describe('#completeJob', () => {
+		describe("#completeJob", () => {
 			let anotherQueue: Queue;
 			let job: Job;
 			let anotherWorker: Worker;
@@ -234,15 +234,17 @@ describe('Worker', () => {
 
 			beforeAll(async () => {
 				anotherQueue = new Queue({
-					queueKey: 'another-example',
+					queueKey: "another-example",
 					redis,
 				});
-				job = { name: 'Another example job to complete' };
+				job = { name: "Another example job to complete" };
 				await anotherQueue.add(job);
 				anotherWorker = new Worker(anotherQueue);
 				anotherWorker.queue.take = async () => {
-					const { newCallCount, result } =
-						incrementCallCountOrReturnJob(callCount, job);
+					const { newCallCount, result } = incrementCallCountOrReturnJob(
+						callCount,
+						job,
+					);
 					callCount = newCallCount;
 					return result;
 				};
@@ -250,21 +252,21 @@ describe('Worker', () => {
 				await delay(200);
 			});
 
-			it('should push the job to the completed queue', async () => {
-				await checkJobsMatch(anotherQueue, job, 'completed');
+			it("should push the job to the completed queue", async () => {
+				await checkJobsMatch(anotherQueue, job, "completed");
 			});
 			it("should set the worker's status to available", async () => {
-				assert.deepEqual(anotherWorker.status, 'available');
+				assert.deepEqual(anotherWorker.status, "available");
 			});
-			it('should then attempt to get another job', async () => {
+			it("should then attempt to get another job", async () => {
 				assert.equal(callCount, 2);
 			});
-			it('should unset the currentJob value', async () => {
+			it("should unset the currentJob value", async () => {
 				assert.equal(anotherWorker.currentJob, null);
 			});
 		});
 
-		describe('#failJob', () => {
+		describe("#failJob", () => {
 			let anotherQueue: Queue;
 			let job: Job;
 			let anotherWorker: Worker;
@@ -272,41 +274,43 @@ describe('Worker', () => {
 
 			beforeAll(async () => {
 				anotherQueue = new Queue({
-					queueKey: 'another-example',
+					queueKey: "another-example",
 					redis,
 				});
-				job = { name: 'Another example job to complete' };
+				job = { name: "Another example job to complete" };
 				await anotherQueue.add(job);
 				anotherWorker = new Worker(anotherQueue);
 				anotherWorker.queue.take = async () => {
-					const { newCallCount, result } =
-						incrementCallCountOrReturnJob(callCount, job);
+					const { newCallCount, result } = incrementCallCountOrReturnJob(
+						callCount,
+						job,
+					);
 					callCount = newCallCount;
 					return result;
 				};
 				anotherWorker.completeJob = async () => {
-					throw new Error('Something');
+					throw new Error("Something");
 				};
 				await anotherWorker.start();
 				await delay(200);
 			});
 
-			it('should push the job to the failed queue', async () => {
-				await checkJobsMatch(anotherQueue, job, 'failed');
+			it("should push the job to the failed queue", async () => {
+				await checkJobsMatch(anotherQueue, job, "failed");
 			});
 			it("should set the worker's status to available", async () => {
-				assert.deepEqual(anotherWorker.status, 'available');
+				assert.deepEqual(anotherWorker.status, "available");
 			});
-			it('should then attempt to get another job', async () => {
+			it("should then attempt to get another job", async () => {
 				assert.equal(callCount, 2);
 			});
 
-			it('should unset the currentJob value', async () => {
+			it("should unset the currentJob value", async () => {
 				assert.equal(anotherWorker.currentJob, null);
 			});
 		});
 
-		describe('#releaseJob', () => {
+		describe("#releaseJob", () => {
 			let anotherQueue: Queue;
 			let job: Job;
 			let anotherWorker: Worker;
@@ -314,15 +318,17 @@ describe('Worker', () => {
 
 			beforeAll(async () => {
 				anotherQueue = new Queue({
-					queueKey: 'another-example',
+					queueKey: "another-example",
 					redis,
 				});
-				job = { name: 'Another example job to complete' };
+				job = { name: "Another example job to complete" };
 				await anotherQueue.add(job);
 				anotherWorker = new Worker(anotherQueue);
 				anotherWorker.queue.take = async () => {
-					const { newCallCount, result } =
-						incrementCallCountOrReturnJob(callCount, job);
+					const { newCallCount, result } = incrementCallCountOrReturnJob(
+						callCount,
+						job,
+					);
 					callCount = newCallCount;
 					return result;
 				};
@@ -332,17 +338,17 @@ describe('Worker', () => {
 				await delay(10);
 			});
 
-			it('should push the job to the available queue', async () => {
-				await checkJobsMatch(anotherQueue, job, 'available');
+			it("should push the job to the available queue", async () => {
+				await checkJobsMatch(anotherQueue, job, "available");
 			});
 			it("should set the worker's status to available", async () => {
-				assert.deepEqual(anotherWorker.status, 'available');
+				assert.deepEqual(anotherWorker.status, "available");
 			});
-			it('should then attempt to get another job', async () => {
+			it("should then attempt to get another job", async () => {
 				assert.equal(callCount, 2);
 			});
 
-			it('should unset the currentJob value', async () => {
+			it("should unset the currentJob value", async () => {
 				assert.equal(anotherWorker.currentJob, null);
 			});
 		});
