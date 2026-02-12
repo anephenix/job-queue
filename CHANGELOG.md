@@ -1,5 +1,35 @@
 # CHANGELOG
 
+### 1.3.27 - Thursday 12th February, 2026
+
+- Replaced eslint with biome
+- Merge pull request #213 from anephenix/dependabot/npm_and_yarn/types/node-25.2.2
+- Bump @types/node from 25.2.0 to 25.2.2
+- Merge pull request #212 from anephenix/dependabot/npm_and_yarn/globals-17.3.0
+- Merge pull request #211 from anephenix/dependabot/npm_and_yarn/types/node-25.2.0
+- Bump globals from 17.1.0 to 17.3.0
+- Bump @types/node from 25.0.10 to 25.2.0
+- Merge pull request #208 from anephenix/dependabot/npm_and_yarn/publint-0.3.17
+- Merge pull request #209 from anephenix/dependabot/npm_and_yarn/types/node-25.0.10
+- Merge pull request #207 from anephenix/dependabot/npm_and_yarn/vitest/coverage-v8-4.0.18
+- Merge pull request #206 from anephenix/dependabot/npm_and_yarn/globals-17.1.0
+- Bump @types/node from 25.0.9 to 25.0.10
+- Bump publint from 0.3.16 to 0.3.17
+- Bump @vitest/coverage-v8 from 4.0.17 to 4.0.18
+- Bump globals from 17.0.0 to 17.1.0
+- Merge pull request #203 from anephenix/dependabot/npm_and_yarn/vitest/coverage-v8-4.0.17
+- Bump @vitest/coverage-v8 from 4.0.16 to 4.0.17
+- Merge pull request #205 from anephenix/dependabot/npm_and_yarn/babel/eslint-parser-7.28.6
+- Merge pull request #204 from anephenix/dependabot/npm_and_yarn/types/node-25.0.9
+- Merge pull request #202 from anephenix/dependabot/npm_and_yarn/vitest-4.0.17
+- Bump @babel/eslint-parser from 7.28.5 to 7.28.6
+- Bump @types/node from 25.0.6 to 25.0.9
+- Bump vitest from 4.0.16 to 4.0.17
+- Merge pull request #201 from anephenix/dependabot/npm_and_yarn/types/node-25.0.6
+- Bump @types/node from 25.0.3 to 25.0.6
+- Merge pull request #200 from anephenix/dependabot/npm_and_yarn/globals-17.0.0
+- Bump globals from 16.5.0 to 17.0.0
+
 ### 1.3.26 - Sunday 4th January, 2026
 
 - Tweaks for new publish workflow
