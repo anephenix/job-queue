@@ -61,4 +61,4 @@ const incrementCallCountOrReturnJob = (
 	}
 };
 
-export { delay, delayUntil, checkJobsMatch, incrementCallCountOrReturnJob };
+export { checkJobsMatch, delay, delayUntil, incrementCallCountOrReturnJob };

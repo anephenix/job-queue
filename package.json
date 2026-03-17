@@ -25,6 +25,7 @@
 	"scripts": {
 		"build": "tsc --project tsconfig.json",
 		"cover": "npm t",
+		"format": "npx @biomejs/biome check . --write",
 		"lint": "npx @biomejs/biome check .",
 		"lint:package": "npx publint",
 		"prepare-patch-release": "npm run build && npm run size && npm run update-changelog && git add CHANGELOG.md && git commit -m \"Updated changelog\" && npm version patch",
