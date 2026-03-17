@@ -1,5 +1,40 @@
 # CHANGELOG
 
+### 1.3.28 - Tuesday 17th March, 2026
+
+- Updated dependencies
+- Applied updates to the GitHub actions for test and publish
+- Merge pull request #227 from anephenix/dependabot/npm_and_yarn/biomejs/biome-2.4.7
+- Updated biome, added a format command, and applied linting fixes
+- Merge pull request #228 from anephenix/dependabot/npm_and_yarn/vitest/coverage-v8-4.1.0
+- Bump @vitest/coverage-v8 from 4.0.18 to 4.1.0
+- Merge pull request #229 from anephenix/dependabot/npm_and_yarn/vitest-4.1.0
+- Merge pull request #226 from anephenix/dependabot/npm_and_yarn/types/node-25.5.0
+- Bump vitest from 4.0.18 to 4.1.0
+- Bump @biomejs/biome from 2.4.6 to 2.4.7
+- Bump @types/node from 25.3.5 to 25.5.0
+- Merge pull request #225 from anephenix/dependabot/npm_and_yarn/biomejs/biome-2.4.6
+- Bump @biomejs/biome from 2.4.4 to 2.4.6
+- Updated dependencies
+- Merge pull request #222 from anephenix/dependabot/npm_and_yarn/types/node-25.3.3
+- Merge pull request #223 from anephenix/dependabot/npm_and_yarn/globals-17.4.0
+- Merge pull request #224 from anephenix/dependabot/npm_and_yarn/publint-0.3.18
+- Bump publint from 0.3.17 to 0.3.18
+- Bump globals from 17.3.0 to 17.4.0
+- Bump @types/node from 25.3.0 to 25.3.3
+- Merge pull request #221 from anephenix/dependabot/npm_and_yarn/npm_and_yarn-b2936519f3
+- Bump rollup in the npm_and_yarn group across 1 directory
+- Merge pull request #220 from anephenix/dependabot/npm_and_yarn/biomejs/biome-2.4.4
+- Merge pull request #218 from anephenix/dependabot/npm_and_yarn/types/node-25.3.0
+- Merge pull request #219 from anephenix/dependabot/npm_and_yarn/redis-5.11.0
+- Bump @biomejs/biome from 2.4.0 to 2.4.4
+- Bump redis from 5.10.0 to 5.11.0
+- Bump @types/node from 25.2.3 to 25.3.0
+- Merge pull request #217 from anephenix/dependabot/npm_and_yarn/types/node-25.2.3
+- Merge pull request #216 from anephenix/dependabot/npm_and_yarn/biomejs/biome-2.4.0
+- Bump @types/node from 25.2.2 to 25.2.3
+- Bump @biomejs/biome from 2.3.15 to 2.4.0
+
 ### 1.3.27 - Thursday 12th February, 2026
 
 - Replaced eslint with biome
