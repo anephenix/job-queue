@@ -1,5 +1,10 @@
 # CHANGELOG
 
+### 1.5.0 - Sunday 16th August, 2026
+
+- Merge pull request #304 from anephenix/feature/sqlite-queue-backend
+- Add SQLite as an alternative backend to Redis and Postgres
+
 ### 1.4.0 - Sunday 16th August, 2026
 
 - Updated the README
