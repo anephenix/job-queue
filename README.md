@@ -225,4 +225,4 @@ distinguished by key prefixes. Pass a `tableName` option to `PostgresQueue`
 
 ### License and Credits
 
-&copy;2025 Anephenix Ltd. Job Queue is licensed under the MIT license.
+&copy;2026 Anephenix Ltd. Job Queue is licensed under the MIT license.
