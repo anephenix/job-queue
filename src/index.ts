@@ -1,6 +1,7 @@
 // Dependencies
 import { PostgresQueue } from "./PostgresQueue.js";
 import { Queue } from "./Queue.js";
+import { SQLiteQueue } from "./SQLiteQueue.js";
 import { Worker } from "./Worker.js";
 
 export type {
@@ -10,6 +11,7 @@ export type {
 	JobQueue,
 	PostgresQueueOptions,
 	QueueOptions,
+	SQLiteQueueOptions,
 } from "./types.js";
 
-export { PostgresQueue, Queue, Worker };
+export { PostgresQueue, Queue, SQLiteQueue, Worker };

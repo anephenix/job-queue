@@ -1,3 +1,4 @@
+import type { Database } from "better-sqlite3";
 import type { Pool } from "pg";
 import type { RedisClientType } from "redis";
 
@@ -30,6 +31,13 @@ export interface QueueOptions {
 export interface PostgresQueueOptions {
 	queueKey: string;
 	pg: Pool;
+	hooks?: Partial<Hooks>;
+	tableName?: string;
+}
+
+export interface SQLiteQueueOptions {
+	queueKey: string;
+	db: Database;
 	hooks?: Partial<Hooks>;
 	tableName?: string;
 }

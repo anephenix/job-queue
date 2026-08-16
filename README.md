@@ -2,19 +2,19 @@
 
 [![npm version](https://badge.fury.io/js/%40anephenix%2Fjob-queue.svg)](https://badge.fury.io/js/%40anephenix%2Fjob-queue) [![Node.js CI](https://github.com/anephenix/job-queue/actions/workflows/node.js.yml/badge.svg)](https://github.com/anephenix/job-queue/actions/workflows/node.js.yml) [![Socket Badge](https://socket.dev/api/badge/npm/package/@anephenix/job-queue)](https://socket.dev/npm/package/@anephenix/job-queue)
 
-A Node.js Job Queue library using Redis or Postgres.
+A Node.js Job Queue library using Redis, Postgres or SQLite.
 
 ### Features
 
 -   Create job queues
 -   Create workers to process jobs on those queues
--   Store the queues and jobs in Redis or Postgres for data persistence
+-   Store the queues and jobs in Redis, Postgres or SQLite for data persistence
 -   Use hooks to trigger actions during the job lifecycle
 
 ### Dependencies
 
 -   [Node.js](https://nodejs.org)
--   [Redis](https://redis.io) or [Postgres](https://www.postgresql.org)
+-   [Redis](https://redis.io), [Postgres](https://www.postgresql.org) or [SQLite](https://www.sqlite.org) (via [better-sqlite3](https://github.com/WiseLibs/better-sqlite3))
 
 ### Install
 
@@ -222,6 +222,66 @@ All queues share one `job_queue_jobs` table by default, distinguished
 by `queueKey`, similarly to how Redis queues share one Redis instance
 distinguished by key prefixes. Pass a `tableName` option to `PostgresQueue`
 (and to `migrate`) if you'd like a queue to use its own table.
+
+#### Using SQLite instead of Redis or Postgres
+
+If you'd rather not run a database server at all, `SQLiteQueue` provides
+the same API as `Queue` and `PostgresQueue`, backed by a local SQLite file
+via [better-sqlite3](https://github.com/WiseLibs/better-sqlite3). This
+works well when your queues and workers all run on the same machine (or
+share the same local disk); SQLite's file locking handles the concurrent
+access, so no separate database process is required. You will need a
+`better-sqlite3` `Database` instance, made accessible to the queue files,
+perhaps in a sqlite.ts file:
+
+```typescript
+// Dependencies
+import Database from "better-sqlite3";
+
+const db = new Database("./job-queue.db");
+
+export default db;
+```
+
+Before using a queue for the first time, create its backing table by
+calling the `migrate` static method once (e.g. as part of your app's
+startup or a migration script). It is idempotent, so it's safe to call
+on every boot:
+
+```typescript
+import { SQLiteQueue } from "@anephenix/job-queue";
+import db from "./sqlite.ts";
+
+SQLiteQueue.migrate(db);
+```
+
+Then create a queue the same way you would with Redis or Postgres:
+
+```typescript
+import db from "./sqlite.ts";
+import { SQLiteQueue, type Hooks } from "@anephenix/job-queue";
+
+type QueueOptions = { queueKey: string; db: typeof db; hooks: Partial<Hooks> };
+const queueOptions: QueueOptions = { queueKey: "messages", db, hooks: {} };
+const messageQueue = new SQLiteQueue(queueOptions);
+
+export default messageQueue;
+```
+
+`SQLiteQueue` implements the same `add`, `take`, `complete`, `fail`,
+`release`, `retry`, `inspect`, `count`, `counts`, `flushAll` and `disconnect`
+methods as `Queue` and `PostgresQueue`, and hooks work identically. All
+queues share one `job_queue_jobs` table by default, distinguished by
+`queueKey`, and accept a `tableName` option the same way `PostgresQueue`
+does.
+
+Because SQLite only ever allows one writer at a time, `take()` claims jobs
+inside an immediate write transaction rather than relying on something
+like Postgres's `FOR UPDATE SKIP LOCKED` — the effect for callers is the
+same (no two workers are ever handed the same job), just serialized rather
+than parallelized at the storage layer. If your workers need to run across
+multiple machines, use `Queue` or `PostgresQueue` instead, since SQLite
+requires all processes to share the same local disk.
 
 ### License and Credits
 
