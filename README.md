@@ -2,19 +2,19 @@
 
 [![npm version](https://badge.fury.io/js/%40anephenix%2Fjob-queue.svg)](https://badge.fury.io/js/%40anephenix%2Fjob-queue) [![Node.js CI](https://github.com/anephenix/job-queue/actions/workflows/node.js.yml/badge.svg)](https://github.com/anephenix/job-queue/actions/workflows/node.js.yml) [![Socket Badge](https://socket.dev/api/badge/npm/package/@anephenix/job-queue)](https://socket.dev/npm/package/@anephenix/job-queue)
 
-A Node.js Job Queue library using Redis.
+A Node.js Job Queue library using Redis or Postgres.
 
 ### Features
 
 -   Create job queues
 -   Create workers to process jobs on those queues
--   Store the queues and jobs in Redis for data persistence
+-   Store the queues and jobs in Redis or Postgres for data persistence
 -   Use hooks to trigger actions during the job lifecycle
 
 ### Dependencies
 
 -   [Node.js](https://nodejs.org)
--   [Redis](https://redis.io)
+-   [Redis](https://redis.io) or [Postgres](https://www.postgresql.org)
 
 ### Install
 
@@ -170,6 +170,58 @@ const queue = new Queue({
 	},
 });
 ```
+
+#### Using Postgres instead of Redis
+
+If you'd rather not run Redis, `PostgresQueue` provides the same API as
+`Queue`, backed by a Postgres table instead. You will need a `pg` Pool,
+made accessible to the queue files, perhaps in a postgres.ts file:
+
+```typescript
+// Dependencies
+import { Pool } from "pg";
+import config from "./config.ts";
+
+const pool = new Pool(config.postgres);
+
+export default pool;
+```
+
+Before using a queue for the first time, create its backing table by
+calling the `migrate` static method once (e.g. as part of your app's
+startup or a migration script). It is idempotent, so it's safe to call
+on every boot:
+
+```typescript
+import { PostgresQueue } from "@anephenix/job-queue";
+import pool from "./postgres.ts";
+
+await PostgresQueue.migrate(pool);
+```
+
+Then create a queue the same way you would with Redis:
+
+```typescript
+import pool from "./postgres.ts";
+import { PostgresQueue, type Hooks } from "@anephenix/job-queue";
+
+type QueueOptions = { queueKey: string; pg: typeof pool; hooks: Partial<Hooks> };
+const queueOptions: QueueOptions = { queueKey: "messages", pg: pool, hooks: {} };
+const messageQueue = new PostgresQueue(queueOptions);
+
+export default messageQueue;
+```
+
+`PostgresQueue` implements the same `add`, `take`, `complete`, `fail`,
+`release`, `retry`, `inspect`, `count`, `counts`, `flushAll` and `disconnect`
+methods as `Queue`, and hooks work identically. Because `Worker` only
+depends on that shared interface, `Worker` instances work unchanged
+with either `Queue` or `PostgresQueue`.
+
+All queues share one `job_queue_jobs` table by default, distinguished
+by `queueKey`, similarly to how Redis queues share one Redis instance
+distinguished by key prefixes. Pass a `tableName` option to `PostgresQueue`
+(and to `migrate`) if you'd like a queue to use its own table.
 
 ### License and Credits
 
