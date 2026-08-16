@@ -1,12 +1,13 @@
 import type { RedisClientType } from "redis";
-import type { Hook, Hooks, Job, QueueOptions } from "./types.ts";
+import { BaseQueue } from "./BaseQueue.js";
+import type { Hooks, Job, JobQueue, QueueOptions } from "./types.ts";
 
-class Queue {
+class Queue extends BaseQueue implements JobQueue {
 	redis: RedisClientType;
 	subQueueKeys: { [key: string]: string };
-	hooks: Hooks;
 
 	constructor({ queueKey, redis, hooks }: QueueOptions) {
+		super(hooks);
 		this.redis = redis;
 		this.subQueueKeys = {
 			available: `${queueKey}-available`,
@@ -14,18 +15,6 @@ class Queue {
 			completed: `${queueKey}-completed`,
 			failed: `${queueKey}-failed`,
 		};
-		this.hooks = Object.assign(
-			{
-				add: { pre: null, post: null },
-				take: { pre: null, post: null },
-				complete: { pre: null, post: null },
-				fail: { pre: null, post: null },
-				release: { pre: null, post: null },
-				retry: { pre: null, post: null },
-				flushAll: { pre: null, post: null },
-			},
-			hooks,
-		);
 		(async () => {
 			this.connect();
 		})();
@@ -38,16 +27,6 @@ class Queue {
 
 	async disconnect(): Promise<string> {
 		return await this.redis.quit();
-	}
-
-	private async callHook(
-		action: keyof Hooks,
-		stage: keyof Hook,
-		job?: Job | undefined,
-	): Promise<void> {
-		if (typeof this.hooks[action][stage] === "function") {
-			return await this.hooks[action][stage]?.(job);
-		}
 	}
 
 	async add(job: Job): Promise<void> {
