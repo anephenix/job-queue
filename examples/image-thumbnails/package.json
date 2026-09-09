@@ -1,0 +1,22 @@
+{
+	"name": "image-thumbnails-example",
+	"version": "1.0.0",
+	"description": "Example: generate image thumbnails in the background using @anephenix/job-queue and sharp",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"worker": "tsx src/start-worker.ts",
+		"add-job": "tsx src/add-job.ts"
+	},
+	"dependencies": {
+		"@anephenix/job-queue": "file:../..",
+		"better-sqlite3": "^13.0.3",
+		"sharp": "^0.35.3"
+	},
+	"devDependencies": {
+		"@types/better-sqlite3": "^9.6.0",
+		"@types/node": "^26.0.0",
+		"tsx": "^4.19.4",
+		"typescript": "^7.0.2"
+	}
+}

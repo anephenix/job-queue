@@ -1,0 +1,14 @@
+{
+	"title": "Invoice #1042",
+	"customer": "Acme Corp",
+	"items": [
+		{ "description": "Consulting services", "quantity": 10, "unitPrice": 150 },
+		{ "description": "Software license", "quantity": 1, "unitPrice": 499 },
+		{ "description": "Onboarding support", "quantity": 4, "unitPrice": 85 },
+		{
+			"description": "Priority support (monthly)",
+			"quantity": 3,
+			"unitPrice": 120
+		}
+	]
+}

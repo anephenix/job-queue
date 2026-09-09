@@ -1,0 +1,22 @@
+{
+	"name": "webhook-delivery-example",
+	"version": "1.0.0",
+	"description": "Example: deliver webhooks with retry-with-backoff using @anephenix/job-queue's fail/retry hooks",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"receiver": "tsx src/receiver.ts",
+		"worker": "tsx src/start-worker.ts",
+		"add-job": "tsx src/add-job.ts"
+	},
+	"dependencies": {
+		"@anephenix/job-queue": "file:../..",
+		"better-sqlite3": "^13.0.3"
+	},
+	"devDependencies": {
+		"@types/better-sqlite3": "^9.6.0",
+		"@types/node": "^26.0.0",
+		"tsx": "^4.19.4",
+		"typescript": "^7.0.2"
+	}
+}
