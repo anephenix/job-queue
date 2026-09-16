@@ -1,0 +1,21 @@
+{
+	"name": "csv-import-example",
+	"version": "1.0.0",
+	"description": "Example: import a CSV file into Postgres in the background using @anephenix/job-queue and PostgresQueue",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"worker": "tsx src/start-worker.ts",
+		"add-job": "tsx src/add-job.ts"
+	},
+	"dependencies": {
+		"@anephenix/job-queue": "file:../..",
+		"csv-parse": "^7.0.2"
+	},
+	"devDependencies": {
+		"@types/node": "^26.0.0",
+		"@types/pg": "^8.21.0",
+		"tsx": "^4.19.4",
+		"typescript": "^7.0.2"
+	}
+}

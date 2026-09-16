@@ -1,0 +1,21 @@
+{
+	"name": "email-sending-example",
+	"version": "1.0.0",
+	"description": "Example: send emails in the background using @anephenix/job-queue, Redis and nodemailer",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"worker": "tsx src/start-worker.ts",
+		"add-job": "tsx src/add-job.ts"
+	},
+	"dependencies": {
+		"@anephenix/job-queue": "file:../..",
+		"nodemailer": "^9.0.5"
+	},
+	"devDependencies": {
+		"@types/nodemailer": "^8.0.1",
+		"@types/node": "^26.0.0",
+		"tsx": "^4.19.4",
+		"typescript": "^7.0.2"
+	}
+}
