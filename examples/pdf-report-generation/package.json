@@ -1,0 +1,23 @@
+{
+	"name": "pdf-report-generation-example",
+	"version": "1.0.0",
+	"description": "Example: render PDF reports in the background using @anephenix/job-queue and pdfkit",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"worker": "tsx src/start-worker.ts",
+		"add-job": "tsx src/add-job.ts"
+	},
+	"dependencies": {
+		"@anephenix/job-queue": "file:../..",
+		"better-sqlite3": "^13.0.3",
+		"pdfkit": "^0.19.1"
+	},
+	"devDependencies": {
+		"@types/better-sqlite3": "^9.6.0",
+		"@types/node": "^26.0.0",
+		"@types/pdfkit": "^0.17.6",
+		"tsx": "^4.19.4",
+		"typescript": "^7.0.2"
+	}
+}
