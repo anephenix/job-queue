@@ -1,0 +1,4 @@
+node_modules
+job-queue.db
+job-queue.db-shm
+job-queue.db-wal
