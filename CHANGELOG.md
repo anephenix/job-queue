@@ -1,5 +1,55 @@
 # CHANGELOG
 
+### 1.5.1 - Sunday 27th September, 2026
+
+- Updated dependencies
+- Updated dependencies
+- Merge pull request #328 from anephenix/dependabot/npm_and_yarn/vitest-5.0.1
+- Merge pull request #327 from anephenix/dependabot/npm_and_yarn/types/node-26.6.1
+- Merge pull request #324 from anephenix/dependabot/npm_and_yarn/vitest/coverage-v8-5.0.1
+- Merge pull request #325 from anephenix/dependabot/npm_and_yarn/biomejs/biome-2.5.14
+- Bump vitest from 5.0.0 to 5.0.1
+- Bump @types/node from 26.5.1 to 26.6.1
+- Bump @biomejs/biome from 2.5.13 to 2.5.14
+- Bump @vitest/coverage-v8 from 5.0.0 to 5.0.1
+- Merge pull request #322 from anephenix/dependabot/npm_and_yarn/types/node-26.5.1
+- Merge pull request #323 from anephenix/dependabot/npm_and_yarn/biomejs/biome-2.5.13
+- Bump @biomejs/biome from 2.5.11 to 2.5.13
+- Bump @types/node from 26.5.0 to 26.5.1
+- Merge pull request #321 from anephenix/dependabot/npm_and_yarn/vitest/coverage-v8-5.0.0
+- Updated dependencies
+- Merge branch 'master' into dependabot/npm_and_yarn/vitest/coverage-v8-5.0.0
+- Merge pull request #318 from anephenix/dependabot/npm_and_yarn/tsx-4.23.13
+- Merge pull request #320 from anephenix/dependabot/npm_and_yarn/globals-17.12.0
+- Merge pull request #317 from anephenix/dependabot/npm_and_yarn/types/node-26.4.1
+- Bump @vitest/coverage-v8 from 4.1.11 to 5.0.0
+- Bump globals from 17.11.0 to 17.12.0
+- Bump tsx from 4.23.12 to 4.23.13
+- Bump @types/node from 26.4.0 to 26.4.1
+- Merge pull request #316 from anephenix/dependabot/npm_and_yarn/biomejs/biome-2.5.11
+- Merge pull request #315 from anephenix/dependabot/npm_and_yarn/types/node-26.4.0
+- Bump @biomejs/biome from 2.5.9 to 2.5.11
+- Bump @types/node from 26.2.0 to 26.4.0
+- Merge pull request #313 from anephenix/dependabot/npm_and_yarn/publint-0.3.24
+- Merge pull request #312 from anephenix/dependabot/npm_and_yarn/vitest-4.1.11
+- Merge pull request #310 from anephenix/dependabot/npm_and_yarn/vitest/coverage-v8-4.1.11
+- Merge pull request #314 from anephenix/dependabot/npm_and_yarn/types/pg-8.23.1
+- Merge pull request #311 from anephenix/dependabot/npm_and_yarn/biomejs/biome-2.5.9
+- Bump @types/pg from 8.21.0 to 8.23.1
+- Bump publint from 0.3.23 to 0.3.24
+- Bump vitest from 4.1.10 to 4.1.11
+- Bump @biomejs/biome from 2.5.8 to 2.5.9
+- Bump @vitest/coverage-v8 from 4.1.10 to 4.1.11
+- Merge pull request #307 from anephenix/dependabot/npm_and_yarn/redis-6.2.1
+- Merge pull request #305 from anephenix/dependabot/npm_and_yarn/tsx-4.23.12
+- Merge pull request #308 from anephenix/dependabot/npm_and_yarn/biomejs/biome-2.5.8
+- Merge pull request #306 from anephenix/dependabot/npm_and_yarn/globals-17.11.0
+- Bump @biomejs/biome from 2.5.7 to 2.5.8
+- Bump redis from 6.2.0 to 6.2.1
+- Bump globals from 17.9.0 to 17.11.0
+- Bump tsx from 4.23.11 to 4.23.12
+- Needed to add the same Postgres image to the publish GitHub workflow file
+
 ### 1.5.0 - Sunday 16th August, 2026
 
 - Merge pull request #304 from anephenix/feature/sqlite-queue-backend
