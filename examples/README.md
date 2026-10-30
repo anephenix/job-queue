@@ -4,14 +4,14 @@ Runnable examples of [`@anephenix/job-queue`](https://github.com/anephenix/job-q
 in use. Each one is a self-contained npm project — `cd` into it, run
 `npm install`, and follow its README.
 
-| Example | Backend | What it shows |
-| --- | --- | --- |
-| [mp4-to-hls](./mp4-to-hls) | SQLite | Transcoding an uploaded video into HLS (`.m3u8` + `.ts`) with ffmpeg |
-| [email-sending](./email-sending) | Redis | Sending email in the background with nodemailer |
-| [csv-import](./csv-import) | Postgres | Streaming a CSV file and bulk-inserting its rows |
-| [image-thumbnails](./image-thumbnails) | SQLite | Generating resized image thumbnails with sharp — the fastest one to try |
-| [webhook-delivery](./webhook-delivery) | SQLite | Retrying failed HTTP deliveries with backoff, using the `fail`/`retry` hooks |
-| [pdf-report-generation](./pdf-report-generation) | SQLite | Rendering a PDF invoice with pdfkit |
+| Example                                          | Backend  | What it shows                                                                |
+| ------------------------------------------------ | -------- | ---------------------------------------------------------------------------- |
+| [mp4-to-hls](./mp4-to-hls)                       | SQLite   | Transcoding an uploaded video into HLS (`.m3u8` + `.ts`) with ffmpeg         |
+| [email-sending](./email-sending)                 | Redis    | Sending email in the background with nodemailer                              |
+| [csv-import](./csv-import)                       | Postgres | Streaming a CSV file and bulk-inserting its rows                             |
+| [image-thumbnails](./image-thumbnails)           | SQLite   | Generating resized image thumbnails with sharp — the fastest one to try      |
+| [webhook-delivery](./webhook-delivery)           | SQLite   | Retrying failed HTTP deliveries with backoff, using the `fail`/`retry` hooks |
+| [pdf-report-generation](./pdf-report-generation) | SQLite   | Rendering a PDF invoice with pdfkit                                          |
 
 ### Which one to start with
 

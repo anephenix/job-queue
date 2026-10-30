@@ -34,18 +34,21 @@ import config from "./config.ts";
 const redis: RedisClientType = createClient(config.redis);
 await redis.connect();
 export default redis;
-
 ```
 
 Once you have that, you can create a queue like this:
 
 ```typescript
-import redis from './redis.ts';
-import type { RedisClientType } from 'redis';
-import { Queue, type Hooks } from '@anephenix/job-queue';
+import redis from "./redis.ts";
+import type { RedisClientType } from "redis";
+import { Queue, type Hooks } from "@anephenix/job-queue";
 
-type QueueOptions = { queueKey: string; redis: RedisClientType, hooks: Partial<Hooks> };
-const queueOptions:QueueOptions = { queueKey: 'messages', redis, hooks: {} };
+type QueueOptions = {
+	queueKey: string;
+	redis: RedisClientType;
+	hooks: Partial<Hooks>;
+};
+const queueOptions: QueueOptions = { queueKey: "messages", redis, hooks: {} };
 const messageQueue = new Queue(queueOptions);
 
 export default messageQueue;
@@ -57,16 +60,16 @@ Once you have the queue ready, you can add jobs like this:
 
 ```typescript
 const job = {
-	name: 'job-001',
+	name: "job-001",
 	data: {
-		from: 'bob@bob.com',
-		to: 'sally@sally.com',
-		subject: 'Have you got the document for ML results?',
-		body: 'I want to check what the loss rate was. Thanks.',
+		from: "bob@bob.com",
+		to: "sally@sally.com",
+		subject: "Have you got the document for ML results?",
+		body: "I want to check what the loss rate was. Thanks.",
 	},
 };
 
-await messageQeueue.add({ name: 'message', data });
+await messageQeueue.add({ name: "message", data });
 ```
 
 #### Setting up workers to process those jobs
@@ -74,8 +77,8 @@ await messageQeueue.add({ name: 'message', data });
 Workers can be setup like this:
 
 ```typescript
-import { type Job, Worker } from '@anephenix/job-queue';
-import messageQueue from '../queues/messageQueue.ts';
+import { type Job, Worker } from "@anephenix/job-queue";
+import messageQueue from "../queues/messageQueue.ts";
 
 type MessageJob = Job & {
 	data: {
@@ -84,19 +87,19 @@ type MessageJob = Job & {
 		from: string;
 		content: string;
 		created_at: string;
-	}
+	};
 };
 
 class MessageWorker extends Worker {
-	async processJob(job:Job): Promise<void> {
-		this.status = 'processing';
+	async processJob(job: Job): Promise<void> {
+		this.status = "processing";
 		try {
-            /* Do something with the job's data */
+			/* Do something with the job's data */
 			const { id, from, to, content } = job.data;
 
-            await this.completeJob(job);
+			await this.completeJob(job);
 		} catch (err) {
-			console.error('Error processing job:', err);
+			console.error("Error processing job:", err);
 			await this.failJob(job);
 		}
 		return;
@@ -149,7 +152,7 @@ action is triggered, and a post hook is called after.
 The way to setup hooks to call can be demonstrated in the example below:
 
 ```typescript
-const queueKey = 'email';
+const queueKey = "email";
 const queue = new Queue({
 	queueKey,
 	redis,
@@ -205,8 +208,16 @@ Then create a queue the same way you would with Redis:
 import pool from "./postgres.ts";
 import { PostgresQueue, type Hooks } from "@anephenix/job-queue";
 
-type QueueOptions = { queueKey: string; pg: typeof pool; hooks: Partial<Hooks> };
-const queueOptions: QueueOptions = { queueKey: "messages", pg: pool, hooks: {} };
+type QueueOptions = {
+	queueKey: string;
+	pg: typeof pool;
+	hooks: Partial<Hooks>;
+};
+const queueOptions: QueueOptions = {
+	queueKey: "messages",
+	pg: pool,
+	hooks: {},
+};
 const messageQueue = new PostgresQueue(queueOptions);
 
 export default messageQueue;
